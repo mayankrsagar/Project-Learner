@@ -5,6 +5,7 @@ import { config } from 'dotenv';
 import express from 'express';
 
 import connectDB from './config/db.js';
+import CourseRoute from './routes/courseRoutes.js';
 import UserRoute from './routes/userRoutes.js';
 
 config();
@@ -25,6 +26,7 @@ app.use(express.json());
 //   res.json({ message: 'API is running…' });
 // });
 app.use('/api/users', UserRoute);
+app.use('/api/courses', CourseRoute);
 
 // 404 handler
 app.use((req, res, next) => {

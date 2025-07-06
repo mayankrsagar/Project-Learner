@@ -5,7 +5,7 @@ const projectSchema = new mongoose.Schema({
   repoUrl:     { type: String },
   thumbnail:   { type: String },
   stack:       [String],
-  createdAt:   { type: Date, default: Date.now },
-}, { timestamps: false });
+  // createdAt:   { type: Date, default: Date.now },
+}, { timestamps: true});
 
 export default mongoose.models.Project || mongoose.model('Project', projectSchema);
