@@ -5,8 +5,9 @@ import { config } from 'dotenv';
 import express from 'express';
 
 import connectDB from './config/db.js';
-import CourseRoute from './routes/courseRoutes.js';
-import UserRoute from './routes/userRoutes.js';
+import CourseRoutes from './routes/courseRoutes.js';
+import ProjectRoutes from './routes/projectRoutes.js';
+import UserRoutes from './routes/userRoutes.js';
 
 config();
 connectDB();
@@ -25,9 +26,9 @@ app.use(express.json());
 // app.get('/', (req, res) => {
 //   res.json({ message: 'API is running…' });
 // });
-app.use('/api/users', UserRoute);
-app.use('/api/courses', CourseRoute);
-
+app.use('/api/users', UserRoutes);
+app.use('/api/courses', CourseRoutes);
+app.use('/api/projects', ProjectRoutes);
 // 404 handler
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Route not found' });

@@ -7,11 +7,11 @@ import {
   list,
   remove,
   update,
-} from '../controllers/courseController';
+} from '../controllers/courseController.js';
 import {
   authorize,
   protect,
-} from '../middleware/auth';
+} from '../middleware/auth.js';
 
 const router = express.Router();
 

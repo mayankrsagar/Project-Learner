@@ -5,7 +5,7 @@ import {
   getCourseById,
   getCourseBySlug,
   updateCourseById,
-} from '../services/courseServices';
+} from '../services/courseServices.js';
 
 export const create = async (req, res) => {
   try {
