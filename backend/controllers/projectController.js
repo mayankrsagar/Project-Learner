@@ -10,12 +10,17 @@ export const create = async (req, res) => {
   try {
     const project = await createProject({
       ...req.body,
-      createdBy: req.user._id,
+      createdBy: req.user._id,  // req.user set by your protect middleware
     });
-    res.status(201).json({ message: 'Project created', project });
+    res.status(201).json({ project });
   } catch (err) {
-    res.status(400).json({ message: 'Error creating project', error: err.message });
+    res.status(400).json({ message: err.message });
   }
+};
+
+export const listByUser = async (req, res) => {
+  const projects = await getProjectsByUser(req.user._id);
+  res.json({ projects });
 };
 
 export const list = async (req, res) => {

@@ -23,5 +23,6 @@ router.use(protect);
 router.post('/', authorize('Learner', 'Admin', 'Mentor'), create);
 router.put('/:id', authorize('Admin', 'Mentor'), update);
 router.delete('/:id', authorize('Admin', 'Mentor'), remove);
+router.get('/my', authorize('Learner'), listByUser);
 
 export default router;

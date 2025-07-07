@@ -7,7 +7,9 @@ const projectSchema = new mongoose.Schema({
   repoUrl:     { type: String },
   thumbnail:   { type: String },
   stack:       [String],
-  // createdAt:   { type: Date, default: Date.now },
-}, { timestamps: true});
+
+  // Link back to the learner who created it
+  createdBy:   { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+}, { timestamps: true });
 
 export default mongoose.models.Project || mongoose.model('Project', projectSchema);
