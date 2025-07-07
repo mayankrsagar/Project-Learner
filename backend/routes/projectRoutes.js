@@ -10,7 +10,7 @@ import {
 import {
   authorize,
   protect,
-} from '../middleware/auth.js';
+} from '../middlewares/auth.js';
 
 const router = express.Router();
 

@@ -11,7 +11,8 @@ import {
 import {
   authorize,
   protect,
-} from '../middleware/auth.js';
+} from '../middlewares/auth.js';
+import sprintRoutes from './sprintRoutes.js';
 
 const router = express.Router();
 
@@ -25,5 +26,8 @@ router.use(protect, authorize('Admin', 'Mentor'));
 router.post('/', create);
 router.put('/:id', update);
 router.delete('/:id', remove);
+
+// under /api/courses/:courseId
+router.use('/:courseId/sprints', sprintRoutes);
 
 export default router;
