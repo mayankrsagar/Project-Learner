@@ -1,7 +1,13 @@
 import axiosClient from './axiosClient';
 
 export const login = async (email: string, password: string) => {
+  console.log('Logging in user:', email);
   const { data } = await axiosClient.post('/api/users/login', { email, password });
+  console.log('Login response:', data);
+  if (!data || !data.user) {
+    console.error('Login failed:', data);
+    return null;
+  }
   return data;
 };
 

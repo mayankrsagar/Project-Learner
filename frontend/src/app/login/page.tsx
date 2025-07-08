@@ -12,8 +12,10 @@ import { useLogin } from '../../hooks/useAuth';
 export default function LoginPage() {
   const router = useRouter();
   const { loginUser } = useLogin();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -44,15 +46,27 @@ export default function LoginPage() {
           />
         </label>
 
-        <label className="block mb-4">
-          <span>Password</span>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"/> 
-        </label>
+       <label className="block mb-4">
+  <span>Password</span>
+  <div className="relative">
+    <input
+      type={showPassword ? 'text' : 'password'}
+      value={password}
+      autoComplete="current-password"
+      onChange={(e) => setPassword(e.target.value)}
+      required
+      className="mt-1 block w-full pr-10 border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+    />
+    <button
+      type="button"
+      onClick={() => setShowPassword((prev) => !prev)}
+      className="absolute inset-y-0 right-2 flex items-center text-sm text-blue-600 dark:text-blue-400"
+    >
+      {showPassword ? 'Hide' : 'Show'}
+    </button>
+  </div>
+</label>
+
 
         <button
           type="submit"
