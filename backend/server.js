@@ -16,8 +16,11 @@ connectDB();
 const app = express();
 
 // ----- MIDDLEWARE -----
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://project-learner.vercel.app'],
+  credentials: true
+}));
 app.use(cookieParser());
-app.use(cors());
 app.use(express.json());
 
 // ----- ROUTES -----
