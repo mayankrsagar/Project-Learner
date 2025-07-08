@@ -4,6 +4,7 @@ import {
   create,
   getOne,
   list,
+  listByUser,
   remove,
   update,
 } from '../controllers/projectController.js';
