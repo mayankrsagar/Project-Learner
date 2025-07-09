@@ -5,6 +5,7 @@ export const login = async (email: string, password: string) => {
   if (!data || !data.user) {
     return null;
   }
+  console.log('User logged in:', data.user);
   return data;
 };
 
