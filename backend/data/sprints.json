@@ -1,0 +1,222 @@
+[
+  {
+    "code": "FS-101",
+    "title": "Introduction to Web Development",
+    "order": 1,
+    "status": "Locked",
+    "startDate": "2024-01-16T08:00:00.000Z",
+    "endDate": "2024-01-22T08:00:00.000Z",
+    "createdAt": "2024-01-10T08:00:00.000Z",
+    "updatedAt": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "code": "FS-102",
+    "title": "HTML & CSS Fundamentals",
+    "order": 2,
+    "status": "InProgress",
+    "startDate": "2024-01-23T08:00:00.000Z",
+    "endDate": "2024-01-29T08:00:00.000Z",
+    "createdAt": "2024-01-10T08:00:00.000Z",
+    "updatedAt": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "code": "FS-103",
+    "title": "JavaScript Essentials",
+    "order": 3,
+    "status": "Completed",
+    "startDate": "2024-01-30T08:00:00.000Z",
+    "endDate": "2024-02-05T08:00:00.000Z",
+    "createdAt": "2024-01-10T08:00:00.000Z",
+    "updatedAt": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "code": "FS-104",
+    "title": "React Fundamentals",
+    "order": 4,
+    "status": "Locked",
+    "startDate": "2024-02-06T08:00:00.000Z",
+    "endDate": "2024-02-12T08:00:00.000Z",
+    "createdAt": "2024-01-10T08:00:00.000Z",
+    "updatedAt": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "code": "FS-105",
+    "title": "Node.js & Express Backend",
+    "order": 5,
+    "status": "Locked",
+    "startDate": "2024-02-13T08:00:00.000Z",
+    "endDate": "2024-02-19T08:00:00.000Z",
+    "createdAt": "2024-01-10T08:00:00.000Z",
+    "updatedAt": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "code": "FS-106",
+    "title": "Database Integration & MongoDB",
+    "order": 6,
+    "status": "Locked",
+    "startDate": "2024-02-20T08:00:00.000Z",
+    "endDate": "2024-02-26T08:00:00.000Z",
+    "createdAt": "2024-01-10T08:00:00.000Z",
+    "updatedAt": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "code": "DSA-201",
+    "title": "Arrays & Strings",
+    "order": 1,
+    "status": "InProgress",
+    "startDate": "2024-02-02T08:00:00.000Z",
+    "endDate": "2024-02-08T08:00:00.000Z",
+    "createdAt": "2024-01-25T08:00:00.000Z",
+    "updatedAt": "2024-02-01T08:00:00.000Z"
+  },
+  {
+    "code": "DSA-202",
+    "title": "Linked Lists",
+    "order": 2,
+    "status": "Locked",
+    "startDate": "2024-02-09T08:00:00.000Z",
+    "endDate": "2024-02-15T08:00:00.000Z",
+    "createdAt": "2024-01-25T08:00:00.000Z",
+    "updatedAt": "2024-02-01T08:00:00.000Z"
+  },
+  {
+    "code": "DSA-203",
+    "title": "Stacks & Queues",
+    "order": 3,
+    "status": "Locked",
+    "startDate": "2024-02-16T08:00:00.000Z",
+    "endDate": "2024-02-22T08:00:00.000Z",
+    "createdAt": "2024-01-25T08:00:00.000Z",
+    "updatedAt": "2024-02-01T08:00:00.000Z"
+  },
+  {
+    "code": "DSA-204",
+    "title": "Trees & Binary Search Trees",
+    "order": 4,
+    "status": "Locked",
+    "startDate": "2024-02-23T08:00:00.000Z",
+    "endDate": "2024-03-01T08:00:00.000Z",
+    "createdAt": "2024-01-25T08:00:00.000Z",
+    "updatedAt": "2024-02-01T08:00:00.000Z"
+  },
+  {
+    "code": "RN-301",
+    "title": "React Native Setup & Components",
+    "order": 1,
+    "status": "Completed",
+    "startDate": "2024-02-16T08:00:00.000Z",
+    "endDate": "2024-02-22T08:00:00.000Z",
+    "createdAt": "2024-02-10T08:00:00.000Z",
+    "updatedAt": "2024-02-15T08:00:00.000Z"
+  },
+  {
+    "code": "RN-302",
+    "title": "Navigation & State Management",
+    "order": 2,
+    "status": "InProgress",
+    "startDate": "2024-02-23T08:00:00.000Z",
+    "endDate": "2024-03-01T08:00:00.000Z",
+    "createdAt": "2024-02-10T08:00:00.000Z",
+    "updatedAt": "2024-02-15T08:00:00.000Z"
+  },
+  {
+    "code": "RN-303",
+    "title": "API Integration & Firebase",
+    "order": 3,
+    "status": "Locked",
+    "startDate": "2024-03-02T08:00:00.000Z",
+    "endDate": "2024-03-08T08:00:00.000Z",
+    "createdAt": "2024-02-10T08:00:00.000Z",
+    "updatedAt": "2024-02-15T08:00:00.000Z"
+  },
+  {
+    "code": "DO-401",
+    "title": "Docker Containerization",
+    "order": 1,
+    "status": "FellShort",
+    "startDate": "2024-03-02T08:00:00.000Z",
+    "endDate": "2024-03-08T08:00:00.000Z",
+    "createdAt": "2024-02-20T08:00:00.000Z",
+    "updatedAt": "2024-03-01T08:00:00.000Z"
+  },
+  {
+    "code": "DO-402",
+    "title": "Kubernetes Orchestration",
+    "order": 2,
+    "status": "Locked",
+    "startDate": "2024-03-09T08:00:00.000Z",
+    "endDate": "2024-03-15T08:00:00.000Z",
+    "createdAt": "2024-02-20T08:00:00.000Z",
+    "updatedAt": "2024-03-01T08:00:00.000Z"
+  },
+  {
+    "code": "DO-403",
+    "title": "CI/CD Pipelines",
+    "order": 3,
+    "status": "Locked",
+    "startDate": "2024-03-16T08:00:00.000Z",
+    "endDate": "2024-03-22T08:00:00.000Z",
+    "createdAt": "2024-02-20T08:00:00.000Z",
+    "updatedAt": "2024-03-01T08:00:00.000Z"
+  },
+  {
+    "code": "ML-501",
+    "title": "Python for Data Science",
+    "order": 1,
+    "status": "Locked",
+    "startDate": "2024-03-16T08:00:00.000Z",
+    "endDate": "2024-03-22T08:00:00.000Z",
+    "createdAt": "2024-03-10T08:00:00.000Z",
+    "updatedAt": "2024-03-15T08:00:00.000Z"
+  },
+  {
+    "code": "ML-502",
+    "title": "Statistics & Probability",
+    "order": 2,
+    "status": "Locked",
+    "startDate": "2024-03-23T08:00:00.000Z",
+    "endDate": "2024-03-29T08:00:00.000Z",
+    "createdAt": "2024-03-10T08:00:00.000Z",
+    "updatedAt": "2024-03-15T08:00:00.000Z"
+  },
+  {
+    "code": "ML-503",
+    "title": "Supervised Learning",
+    "order": 3,
+    "status": "Locked",
+    "startDate": "2024-03-30T08:00:00.000Z",
+    "endDate": "2024-04-05T08:00:00.000Z",
+    "createdAt": "2024-03-10T08:00:00.000Z",
+    "updatedAt": "2024-03-15T08:00:00.000Z"
+  },
+  {
+    "code": "SD-601",
+    "title": "Scalability Principles",
+    "order": 1,
+    "status": "InProgress",
+    "startDate": "2024-04-02T08:00:00.000Z",
+    "endDate": "2024-04-08T08:00:00.000Z",
+    "createdAt": "2024-03-25T08:00:00.000Z",
+    "updatedAt": "2024-04-01T08:00:00.000Z"
+  },
+  {
+    "code": "SD-602",
+    "title": "Database Design & Optimization",
+    "order": 2,
+    "status": "Locked",
+    "startDate": "2024-04-09T08:00:00.000Z",
+    "endDate": "2024-04-15T08:00:00.000Z",
+    "createdAt": "2024-03-25T08:00:00.000Z",
+    "updatedAt": "2024-04-01T08:00:00.000Z"
+  },
+  {
+    "code": "SD-603",
+    "title": "Microservices Architecture",
+    "order": 3,
+    "status": "Locked",
+    "startDate": "2024-04-16T08:00:00.000Z",
+    "endDate": "2024-04-22T08:00:00.000Z",
+    "createdAt": "2024-03-25T08:00:00.000Z",
+    "updatedAt": "2024-04-01T08:00:00.000Z"
+  }
+]

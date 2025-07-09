@@ -35,6 +35,8 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logoutUser();
+      router.push('/login');
+      // dispatch(toggleMobileMenu(false));
     } catch (error) {
       console.error('Logout failed:', error);
     }

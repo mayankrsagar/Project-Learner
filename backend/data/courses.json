@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Full Stack Web Development",
+    "slug": "full-stack-web-development",
+    "description": "Master modern web development with React, Node.js, and MongoDB. Build real-world applications from scratch.",
+    "coverImage": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800",
+    "techStack": ["React", "Node.js", "MongoDB", "Express.js", "JavaScript", "HTML", "CSS"],
+    "publishedAt": "2024-01-15T08:00:00.000Z",
+    "createdAt": "2024-01-10T08:00:00.000Z",
+    "updatedAt": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "title": "Data Structures & Algorithms",
+    "slug": "data-structures-algorithms",
+    "description": "Master fundamental data structures and algorithms. Essential for coding interviews and competitive programming.",
+    "coverImage": "https://images.unsplash.com/photo-1509475826633-fed577a2c71b?w=800",
+    "techStack": ["Python", "Java", "C++", "JavaScript"],
+    "publishedAt": "2024-02-01T08:00:00.000Z",
+    "createdAt": "2024-01-25T08:00:00.000Z",
+    "updatedAt": "2024-02-01T08:00:00.000Z"
+  },
+  {
+    "title": "Mobile App Development with React Native",
+    "slug": "mobile-app-development-react-native",
+    "description": "Build cross-platform mobile applications using React Native. Learn to create iOS and Android apps with a single codebase.",
+    "coverImage": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800",
+    "techStack": ["React Native", "JavaScript", "Redux", "Firebase", "Expo"],
+    "publishedAt": "2024-02-15T08:00:00.000Z",
+    "createdAt": "2024-02-10T08:00:00.000Z",
+    "updatedAt": "2024-02-15T08:00:00.000Z"
+  },
+  {
+    "title": "DevOps & Cloud Computing",
+    "slug": "devops-cloud-computing",
+    "description": "Learn modern DevOps practices and cloud deployment. Master Docker, Kubernetes, AWS, and CI/CD pipelines.",
+    "coverImage": "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800",
+    "techStack": ["Docker", "Kubernetes", "AWS", "Jenkins", "Terraform", "Linux"],
+    "publishedAt": "2024-03-01T08:00:00.000Z",
+    "createdAt": "2024-02-20T08:00:00.000Z",
+    "updatedAt": "2024-03-01T08:00:00.000Z"
+  },
+  {
+    "title": "Machine Learning Fundamentals",
+    "slug": "machine-learning-fundamentals",
+    "description": "Introduction to machine learning concepts, algorithms, and practical applications using Python and popular ML libraries.",
+    "coverImage": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800",
+    "techStack": ["Python", "TensorFlow", "PyTorch", "Scikit-learn", "Pandas", "NumPy"],
+    "publishedAt": "2024-03-15T08:00:00.000Z",
+    "createdAt": "2024-03-10T08:00:00.000Z",
+    "updatedAt": "2024-03-15T08:00:00.000Z"
+  },
+  {
+    "title": "System Design & Architecture",
+    "slug": "system-design-architecture",
+    "description": "Learn to design scalable systems and understand distributed architecture patterns for large-scale applications.",
+    "coverImage": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800",
+    "techStack": ["System Design", "Microservices", "Redis", "PostgreSQL", "RabbitMQ", "Apache Kafka"],
+    "publishedAt": "2024-04-01T08:00:00.000Z",
+    "createdAt": "2024-03-25T08:00:00.000Z",
+    "updatedAt": "2024-04-01T08:00:00.000Z"
+  }
+]
