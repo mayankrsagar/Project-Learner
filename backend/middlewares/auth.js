@@ -18,8 +18,8 @@ export const protect = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log('✅ Token decoded successfully:', { id: decoded.id, email: decoded.email });
-    
-    req.user = await findUserById(decoded.id).select('-password');
+
+    req.user = await findUserById(decoded.id, '-password');
     if (!req.user) throw new Error('User not found');
     
     console.log('✅ User found:', req.user.email);

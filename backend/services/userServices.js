@@ -17,8 +17,12 @@ export const findByEmail = (email) => {
     return User.findOne ({ email }).exec();
 }   
 
-export const findUserById = (id) => {
-    return User.findById(id).exec();
+export const findUserById = (id, selectFields = null) => {
+    const query = User.findById(id);
+    if (selectFields) {
+        return query.select(selectFields).exec();
+    }
+    return query.exec();
 }
 
 export const updateById = (id, updateData) => {
