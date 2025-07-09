@@ -1,11 +1,11 @@
-import axiosClient from './axiosClient';
+import fetchClient from './fetchClient';
 
 export const fetchMyProjects = async () => {
-  const { data } = await axiosClient.get('/api/projects/my');
+  const data = await fetchClient.get('/api/projects/my');
   return data;
 };
 
 export const createProject = async (projectData: unknown) => {
-  const { data } = await axiosClient.post('/api/projects', projectData);
+  const data = await fetchClient.post('/api/projects', projectData);
   return data;
 };

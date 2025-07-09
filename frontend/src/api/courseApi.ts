@@ -1,11 +1,11 @@
-import axiosClient from './axiosClient';
+import fetchClient from './fetchClient';
 
 export const fetchCourses = async () => {
-  const { data } = await axiosClient.get('/api/courses');
+  const data = await fetchClient.get('/api/courses');
   return data;
 };
 
 export const fetchCourse = async (id: string) => {
-  const { data } = await axiosClient.get(`/api/courses/${id}`);
+  const data = await fetchClient.get(`/api/courses/${id}`);
   return data;
 };

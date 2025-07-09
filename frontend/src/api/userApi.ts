@@ -1,7 +1,6 @@
-// src/api/courseApi.ts
-import axiosClient from './axiosClient';
+import fetchClient from './fetchClient';
 
 export const fetchMe = async () => {
-  const { data } = await axiosClient.get('/api/users/me');
+  const data = await fetchClient.get('/api/users/me');
   return data;
 };

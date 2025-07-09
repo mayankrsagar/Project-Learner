@@ -1,0 +1,584 @@
+{
+  "info": {
+    "name": "Project Learner API",
+    "description": "Complete API collection for Project Learner application",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://project-learner.onrender.com",
+      "type": "string"
+    },
+    {
+      "key": "localUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"Learner\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe Updated\",\n  \"currentProfession\": \"Software Developer\",\n  \"preferredJobLocation\": \"Remote\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete My Account",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users (Admin Only)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User by ID (Admin Only)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Updated Name\",\n  \"role\": \"Mentor\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile by Admin",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Admin Updated Name\",\n  \"currentProfession\": \"Admin\",\n  \"preferredJobLocation\": \"Office\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/admin/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "admin", "me"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Courses",
+      "item": [
+        {
+          "name": "Get All Courses (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course by ID (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses", "{{courseId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course by ID (Invalid Format)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/invalid123",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses", "invalid123"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course by Slug (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/slug/{{courseSlug}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses", "slug", "{{courseSlug}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Course (Admin/Mentor Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"React Fundamentals\",\n  \"slug\": \"react-fundamentals\",\n  \"description\": \"Learn React from scratch\",\n  \"techStack\": [\"React\", \"JavaScript\", \"HTML\", \"CSS\"],\n  \"coverImage\": \"https://example.com/react-cover.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/courses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Course (Admin/Mentor Only)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Advanced React\",\n  \"description\": \"Advanced React concepts and patterns\",\n  \"techStack\": [\"React\", \"Redux\", \"TypeScript\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses", "{{courseId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Course (Admin/Mentor Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses", "{{courseId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "Get All Projects (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Project by ID (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/{{projectId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", "{{projectId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Project by ID (Invalid Format)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/invalid123",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", "invalid123"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Projects (Learner Only)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/my",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", "my"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Project (Learner/Admin/Mentor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Todo App\",\n  \"description\": \"A simple todo application built with React\",\n  \"liveUrl\": \"https://my-todo-app.vercel.app\",\n  \"repoUrl\": \"https://github.com/username/todo-app\",\n  \"thumbnail\": \"https://example.com/todo-thumbnail.jpg\",\n  \"stack\": [\"React\", \"Node.js\", \"MongoDB\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Project (Admin/Mentor Only)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Advanced Todo App\",\n  \"description\": \"An advanced todo application with user authentication\",\n  \"stack\": [\"React\", \"Node.js\", \"MongoDB\", \"JWT\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/{{projectId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", "{{projectId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Project (Admin/Mentor Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/{{projectId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", "{{projectId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Sprints",
+      "item": [
+        {
+          "name": "Get Sprints for Course (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}/sprints",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses", "{{courseId}}", "sprints"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Sprints (Invalid Course ID)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/invalid123/sprints",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses", "invalid123", "sprints"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Sprint (Admin/Mentor Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Sprint 1: Getting Started\",\n  \"description\": \"Introduction to the course\",\n  \"order\": 1,\n  \"duration\": \"1 week\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}/sprints",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses", "{{courseId}}", "sprints"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Sprint (Admin/Mentor Only)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Sprint 1: Updated Title\",\n  \"description\": \"Updated description\",\n  \"duration\": \"2 weeks\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}/sprints/{{sprintId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses", "{{courseId}}", "sprints", "{{sprintId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Sprint (Admin/Mentor Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}/sprints/{{sprintId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses", "{{courseId}}", "sprints", "{{sprintId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Sessions",
+      "item": [
+        {
+          "name": "Get Sessions for Sprint (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}/sprints/{{sprintId}}/sessions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "courses", "{{courseId}}", "sprints", "{{sprintId}}", "sessions"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Testing & Validation",
+      "item": [
+        {
+          "name": "Test Invalid MongoDB ID Format",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/123",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", "123"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Test Missing Required Fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Missing title field\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Test Unauthorized Access",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

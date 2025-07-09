@@ -3,6 +3,7 @@ import {
   deleteProjectById,
   getAllProjects,
   getProjectById,
+  getProjectsByUser,
   updateProjectById,
 } from '../services/projectServices.js';
 

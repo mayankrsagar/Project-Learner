@@ -65,25 +65,22 @@ export const LoginForm: React.FC = () => {
   );
 };
 
+import { useRegister } from '../hooks/useAuth';
+
 // ------------------- RegisterForm -------------------
 export const RegisterForm: React.FC = () => {
-  const [username, setUsername] = useState('');
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const { registerUser } = useRegister();
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
     try {
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Registration failed');
+      await registerUser(fullName, email, password);
       router.push('/login');
     } catch (err: unknown) {
       if (err instanceof Error) setError(err.message);
@@ -95,11 +92,11 @@ export const RegisterForm: React.FC = () => {
       <h2 className="text-2xl font-semibold mb-4">Register</h2>
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <label className="block mb-2">
-        <span>Username</span>
+        <span>Full Name</span>
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
           required
           className="mt-1 block w-full border rounded p-2"
         />

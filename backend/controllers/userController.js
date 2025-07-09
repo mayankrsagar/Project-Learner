@@ -45,7 +45,9 @@ export const login = async (req, res) => {
     await user.save({ validateBeforeSave: false }); // Skip validation in case password is untouched
 
     // Issue token
-   issueToken(res, user);
+    console.log('🔑 Issuing token for user:', user.email);
+    issueToken(res, user);
+    console.log('🍪 Token cookie should be set now');
 
     // Send sanitized response
     const { password: _, ...safeUser } = user.toObject(); // remove password, retain others
@@ -61,9 +63,11 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   res.clearCookie('token', {
     httpOnly: true,
-    sameSite: 'Strict',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+    path: '/',
+    domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined
   });
-//   console.log(`User logged out at ${new Date().toISOString()}`);
   res.status(200).json({ message: 'Logout successful' });
 }
 

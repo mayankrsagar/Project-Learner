@@ -5,6 +5,7 @@ import React from 'react';
 
 import { Pencil } from 'lucide-react';
 import Image from 'next/image';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 // Dummy data - replace with real props or fetch
 const user = {
@@ -89,7 +90,8 @@ const KeyValue = ({ label, value, date }: { label: string; value: string; date?:
 
 export default function ProfilePage() {
   return (
-    <div className="space-y-8 p-4 max-w-4xl mx-auto">
+    <ProtectedRoute>
+      <div className="space-y-8 p-4 max-w-4xl mx-auto">
       {/* Header */}
       <div className="relative bg-blue-100 dark:bg-gray-700 rounded-lg h-40 overflow-hidden">
   <Image
@@ -163,6 +165,7 @@ export default function ProfilePage() {
           <KeyValue key={item.label} label={item.label} value={item.value} date={item.date} />
         ))}
       </SectionCard>
-    </div>
+      </div>
+    </ProtectedRoute>
   );
 }
