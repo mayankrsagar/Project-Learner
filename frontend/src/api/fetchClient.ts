@@ -1,3 +1,4 @@
+// src/api/fetchClient.ts
 const baseURL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
@@ -23,15 +24,12 @@ class FetchClient {
     options: FetchOptions = {}
   ): Promise<unknown> {
     const url = `${this.baseURL}${endpoint}`;
-    const timeout = options.timeout || this.defaultTimeout;
+    const timeout = options.timeout ?? this.defaultTimeout;
 
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
       ...options.headers,
     };
-
-    // Authentication is handled via HTTP-only cookies
-    // No need to manually add Authorization header
 
     const config: RequestInit = {
       ...options,
@@ -48,90 +46,72 @@ class FetchClient {
         ...config,
         signal: controller.signal,
       });
-
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        // Handle 401 unauthorized specifically  
+        // Special‑case 401 if needed (token expired, etc.)
         if (response.status === 401) {
-          // Token is in HTTP-only cookie, can't be removed from frontend
-          // Backend will handle token expiration
+          // Backend handles clearing cookies / sessions
         }
-        
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          (errorData as any).message ||
-            `HTTP ${response.status}: ${response.statusText}`
-        );
+        // Try to parse error payload as { message?: string }
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        try {
+          const payload = (await response.json()) as { message?: string };
+          if (payload.message) errorMessage = payload.message;
+        } catch {
+          /* ignore JSON parse errors */
+        }
+        throw new Error(errorMessage);
       }
 
       return await response.json();
-    } catch (error: unknown) {
+    } catch (err: unknown) {
       clearTimeout(timeoutId);
 
-      if (
-        error instanceof Error &&
-        (error as any).name === 'AbortError'
-      ) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
         throw new Error('Request timeout');
       }
-
-      if (error instanceof TypeError) {
-        console.error('Network error:', error.message);
-        throw new Error('Network error - please check your connection');
+      if (err instanceof TypeError) {
+        console.error('Network error:', err.message);
+        throw new Error('Network error – please check your connection');
       }
-
-      throw error;
+      if (err instanceof Error) {
+        throw err;
+      }
+      // Fallback for truly unknown errors
+      throw new Error('An unknown error occurred');
     }
   }
 
-  async get(
-    endpoint: string,
-    options: FetchOptions = {}
-  ): Promise<unknown> {
+  get(endpoint: string, options: FetchOptions = {}): Promise<unknown> {
     return this.request(endpoint, { ...options, method: 'GET' });
   }
 
-  async post(
-    endpoint: string,
-    data?: unknown,
-    options: FetchOptions = {}
-  ): Promise<unknown> {
+  post(endpoint: string, data?: unknown, options: FetchOptions = {}): Promise<unknown> {
     return this.request(endpoint, {
       ...options,
       method: 'POST',
-      body: data ? JSON.stringify(data) : undefined,
+      body: data !== undefined ? JSON.stringify(data) : undefined,
     });
   }
 
-  async put(
-    endpoint: string,
-    data?: unknown,
-    options: FetchOptions = {}
-  ): Promise<unknown> {
+  put(endpoint: string, data?: unknown, options: FetchOptions = {}): Promise<unknown> {
     return this.request(endpoint, {
       ...options,
       method: 'PUT',
-      body: data ? JSON.stringify(data) : undefined,
+      body: data !== undefined ? JSON.stringify(data) : undefined,
     });
   }
 
-  async delete(
-    endpoint: string,
-    options: FetchOptions = {}
-  ): Promise<unknown> {
+  delete(endpoint: string, options: FetchOptions = {}): Promise<unknown> {
     return this.request(endpoint, { ...options, method: 'DELETE' });
   }
 
-  async patch(
-    endpoint: string,
-    data?: unknown,
-    options: FetchOptions = {}
-  ): Promise<unknown> {
+  patch(endpoint: string, data?: unknown, options: FetchOptions = {}): Promise<unknown> {
     return this.request(endpoint, {
       ...options,
       method: 'PATCH',
-      body: data ? JSON.stringify(data) : undefined,
+      body: data !== undefined ? JSON.stringify(data) : undefined,
     });
   }
 }

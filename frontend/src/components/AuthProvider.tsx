@@ -1,11 +1,16 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+
 import { useUser } from '../hooks/useUser';
 
 interface AuthContextType {
-  user: any;
+  user: unknown | null;  
   isLoading: boolean;
   isError: boolean;
   isAuthenticated: boolean;
@@ -28,7 +33,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { user, isLoading, isError } = useUser();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
 
   useEffect(() => {
     // Check if user is authenticated

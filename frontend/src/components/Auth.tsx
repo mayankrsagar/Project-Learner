@@ -7,6 +7,8 @@ import {
 
 import { useRouter } from 'next/navigation';
 
+import { useRegister } from '../hooks/useAuth';
+
 // ------------------- LoginForm -------------------
 export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -64,8 +66,6 @@ export const LoginForm: React.FC = () => {
     </form>
   );
 };
-
-import { useRegister } from '../hooks/useAuth';
 
 // ------------------- RegisterForm -------------------
 export const RegisterForm: React.FC = () => {

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+
 import { X } from 'lucide-react';
 
 interface PersonalData {
@@ -129,7 +130,7 @@ const EditPersonalModal: React.FC<EditPersonalModalProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Father's Name
+              Father&apos;s Name
             </label>
             <input
               type="text"

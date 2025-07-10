@@ -87,7 +87,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
           
           <div className="text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/register" className="text-blue-600 dark:text-blue-400 hover:underline">
                 Register here
               </Link>
