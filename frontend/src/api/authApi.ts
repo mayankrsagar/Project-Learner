@@ -18,7 +18,7 @@ export const login = async (
   )) as LoginResponse;
 
   if (!data || !data.user) return null;
-  console.log('User logged in:', data.user);
+  // console.log('User logged in:', data.user);
   return data;
 };
 
