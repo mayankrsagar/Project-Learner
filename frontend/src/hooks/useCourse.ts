@@ -1,12 +1,25 @@
+// src/hooks/useCourse.ts
 import useSWR from 'swr';
+
+import { Course } from '@/types';
 
 import { fetchCourse } from '../api/courseApi';
 
-export const useCourse = (id: string) => {
-  const { data, error } = useSWR(id ? `course/${id}` : null, () => fetchCourse(id));
+interface CourseResponse {
+  course: Course;
+  message?: string;
+}
+
+export const useCourse = (id: string | null) => {
+  const shouldFetch = Boolean(id);
+  const { data, error } = useSWR<CourseResponse>(
+    shouldFetch ? `course/${id}` : null,
+    () => fetchCourse(id as string) as Promise<CourseResponse>
+  );
+
   return {
-    course: data?.course,
-    isLoading: !error && !data,
+    course: data?.course ?? null,
+    isLoading: shouldFetch && !error && !data,
     isError: error,
   };
 };

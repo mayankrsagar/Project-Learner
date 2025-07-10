@@ -1,31 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+
+import { Sprint } from '@/types';
+
 import {
-  fetchSprintsForCourse,
   createSprint,
-  updateSprint,
   deleteSprint,
+  fetchSprintsForCourse,
+  updateSprint,
   updateSprintStatus,
 } from '../api/sprintApi';
 
+// interface Sprint {
+//   _id: string;
+//   code: string;
+//   title: string;
+//   order: number;
+//   status: string;
+// }
+
 const SprintManager = ({ courseId }: { courseId: string }) => {
-  const [sprints, setSprints] = useState([]);
+  const [sprints, setSprints] = useState<Sprint[]>([]);
   const [form, setForm] = useState({ code: '', title: '', order: 1, status: 'Locked' });
-  const [editingId, setEditingId] = useState(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadSprints();
-  }, [courseId]);
-
-  const loadSprints = async () => {
+const loadSprints = useCallback(async () => {
     try {
-      const data = await fetchSprintsForCourse(courseId);
+      const data = await fetchSprintsForCourse(courseId) as { sprints: Sprint[] };
       setSprints(data.sprints || []);
     } catch (error) {
       console.error('Failed to fetch sprints', error);
     }
-  };
+  }, [courseId]);
 
-  const handleSubmit = async (event) => {
+
+  useEffect(() => {
+    loadSprints();
+  }, [courseId, loadSprints]);
+
+  
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       if (editingId) {
@@ -41,17 +59,17 @@ const SprintManager = ({ courseId }: { courseId: string }) => {
     }
   };
 
-  const handleEdit = (sprint) => {
-    setForm({ 
-      code: sprint.code, 
-      title: sprint.title, 
-      order: sprint.order, 
-      status: sprint.status 
+  const handleEdit = (sprint: Sprint): void => {
+    setForm({
+      code: sprint.code,
+      title: sprint.title,
+      order: sprint.order,
+      status: sprint.status
     });
     setEditingId(sprint._id);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string): Promise<void> => {
     try {
       await deleteSprint(courseId, id);
       loadSprints();
@@ -60,7 +78,7 @@ const SprintManager = ({ courseId }: { courseId: string }) => {
     }
   };
 
-  const handleStatusUpdate = async (id, newStatus) => {
+  const handleStatusUpdate = async (id: string, newStatus: string): Promise<void> => {
     try {
       await updateSprintStatus(courseId, id, newStatus);
       loadSprints();

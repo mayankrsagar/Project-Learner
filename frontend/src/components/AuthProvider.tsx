@@ -2,65 +2,53 @@
 
 import React, {
   createContext,
+  ReactNode,
   useContext,
   useEffect,
   useState,
 } from 'react';
 
+import { UserProfile } from '@/types'; // Ensure correct path
+
 import { useUser } from '../hooks/useUser';
 
 interface AuthContextType {
-  user: unknown | null;  
+  user: UserProfile | null;
   isLoading: boolean;
-  isError: boolean;
+  error: unknown;
   isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const { user, isLoading, isError } = useUser();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // const router = useRouter();
+  const { user, isLoading, isError } = useUser(); 
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    // Check if user is authenticated
     if (!isLoading) {
-      if (user) {
-        setIsAuthenticated(true);
-      } else {
-        // Check if error is due to unauthorized access
-        if (isError && (isError.message?.includes('401') || isError.message?.includes('Unauthorized'))) {
-          setIsAuthenticated(false);
-        } else {
-          setIsAuthenticated(false);
-        }
-      }
+      setIsAuthenticated(Boolean(user) && !isError);
     }
   }, [user, isLoading, isError]);
 
-  const value = {
-    user,
+  const value: AuthContextType = {
+    user: user ?? null,
     isLoading,
-    isError,
+    error: isError,
     isAuthenticated,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

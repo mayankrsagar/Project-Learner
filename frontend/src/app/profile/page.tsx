@@ -68,8 +68,10 @@ export default function ProfilePage() {
   if (!userData) return <ProtectedRoute><div>Loading...</div></ProtectedRoute>;
 
   const updateField = async (data: Partial<UserProfile>) => {
-    await updateProfile(data);
-    setUserData(prev => prev ? { ...prev, ...data } : prev);
+    if (!userData) return;
+    const updatedProfile: UserProfile = { ...userData, ...data };
+    await updateProfile(updatedProfile);
+    setUserData(updatedProfile);
   };
 
   const completeness = Math.round(

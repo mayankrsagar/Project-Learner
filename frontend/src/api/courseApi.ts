@@ -1,64 +1,63 @@
+import {
+  Course,
+  CreateCourseData,
+  UpdateCourseData,
+} from '@/types';
+
+// src/api/courseApi.ts
 import fetchClient from './fetchClient';
 
-// Types for Course
-export interface Course {
-  _id: string;
-  title: string;
-  slug: string;
-  description?: string;
-  coverImage?: string;
-  techStack?: string[];
-  createdBy?: string;
-  publishedAt?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// Response interfaces
+type CoursesResponse = { courses: Course[] };
+type CourseResponse = { course: Course };
 
-export interface CreateCourseData {
-  title: string;
-  slug: string;
-  description?: string;
-  coverImage?: string;
-  techStack?: string[];
-  publishedAt?: string;
-}
-
-export interface UpdateCourseData {
-  title?: string;
-  slug?: string;
-  description?: string;
-  coverImage?: string;
-  techStack?: string[];
-  publishedAt?: string;
-}
-
-// CRUD operations for courses
-export const fetchCourses = async () => {
-  const data = await fetchClient.get('/api/courses');
+/**
+ * Fetch all courses
+ */
+export const fetchCourses = async (): Promise<CoursesResponse> => {
+  const data = (await fetchClient.get('/api/courses')) as CoursesResponse;
   return data;
 };
 
-export const fetchCourse = async (id: string) => {
-  const data = await fetchClient.get(`/api/courses/${id}`);
+/**
+ * Fetch a single course by ID
+ */
+export const fetchCourse = async (id: string): Promise<CourseResponse> => {
+  const data = (await fetchClient.get(`/api/courses/${id}`)) as CourseResponse;
   return data;
 };
 
-export const fetchCourseBySlug = async (slug: string) => {
-  const data = await fetchClient.get(`/api/courses/slug/${slug}`);
+/**
+ * Fetch a single course by slug
+ */
+export const fetchCourseBySlug = async (slug: string): Promise<CourseResponse> => {
+  const data = (await fetchClient.get(`/api/courses/slug/${slug}`)) as CourseResponse;
   return data;
 };
 
-export const createCourse = async (courseData: CreateCourseData) => {
-  const data = await fetchClient.post('/api/courses', courseData);
+/**
+ * Create a new course
+ */
+export const createCourse = async (courseData: CreateCourseData): Promise<CourseResponse> => {
+  const data = (await fetchClient.post('/api/courses', courseData)) as CourseResponse;
   return data;
 };
 
-export const updateCourse = async (id: string, courseData: UpdateCourseData) => {
-  const data = await fetchClient.put(`/api/courses/${id}`, courseData);
+/**
+ * Update an existing course
+ */
+export const updateCourse = async (
+  id: string,
+  courseData: UpdateCourseData
+): Promise<CourseResponse> => {
+  const data = (await fetchClient.put(`/api/courses/${id}`, courseData)) as CourseResponse;
   return data;
 };
 
-export const deleteCourse = async (id: string) => {
-  const data = await fetchClient.delete(`/api/courses/${id}`);
+/**
+ * Delete a course
+ */
+export const deleteCourse = async (id: string): Promise<{ message: string }> => {
+  const data = (await fetchClient.delete(`/api/courses/${id}`)) as { message: string };
   return data;
 };

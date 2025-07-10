@@ -1,9 +1,16 @@
 import useSWR from 'swr';
 
+import { UserProfile } from '@/types';
+
 import { fetchMe } from '../api/userApi';
 
+interface FetchMeResponse {
+  message: string;
+  user: UserProfile;
+}
+
 export const useUser = () => {
-  const { data, error } = useSWR('me', fetchMe, {
+  const { data, error } = useSWR<FetchMeResponse>('me', fetchMe, {
     errorRetryCount: 1,
     errorRetryInterval: 5000,
     shouldRetryOnError: (err) => {
@@ -16,6 +23,7 @@ export const useUser = () => {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
+
   return {
     user: data?.user,
     isLoading: !error && !data,

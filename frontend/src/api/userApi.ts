@@ -1,10 +1,17 @@
+import { UserProfile } from '@/types';
+
 import fetchClient from './fetchClient';
 
-export const fetchMe = async (): Promise<unknown> => {
-  return await fetchClient.get('/api/users/me');
+interface FetchMeResponse {
+  message: string;
+  user: UserProfile;
+}
+
+export const fetchMe = async (): Promise<FetchMeResponse> => {
+  return await fetchClient.get('/api/users/me') as FetchMeResponse;
 };
 
-export const updateProfile = async (profileData: unknown): Promise<unknown> => {
+export const updateProfile = async (profileData: UserProfile): Promise<unknown> => {
   return await fetchClient.put('/api/users/me', profileData);
 };
 
