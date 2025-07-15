@@ -7,13 +7,13 @@ export const issueToken = (res, user) => {
     { expiresIn: '7d' }
   );
 
-  const cookieOptions = {
+   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Enable secure for production
-    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // Allow cross-origin for production
+    secure: true,       // 👈 must be true for SameSite=None
+    sameSite: 'None',   // 👈 allow cross-site fetches
     path: '/',
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined // Set domain for production
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    // domain: '.onrender.com', // optional, host-only is fine
   };
 
   console.log('🍪 Setting cookie with options:', cookieOptions);

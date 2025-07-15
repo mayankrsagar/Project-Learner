@@ -7,8 +7,8 @@ export const protect = async (req, res, next) => {
   const token = req.cookies.token;           // requires cookie-parser
   
   // Debug logging
-  // console.log('🍪 Cookies received:', req.cookies);
-  // console.log('🔑 Token:', token ? 'Present' : 'Missing');
+  console.log('🍪 Cookies received:', req.cookies);
+  console.log('🔑 Token:', token ? 'Present' : 'Missing');
   
   if (!token) {
     // console.log('❌ No token found in cookies');
@@ -17,7 +17,7 @@ export const protect = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // console.log('✅ Token decoded successfully:', { id: decoded.id, email: decoded.email });
+    console.log('✅ Token decoded successfully:', { id: decoded.id, email: decoded.email });
 
     req.user = await findUserById(decoded.id, '-password');
     if (!req.user) throw new Error('User not found');
@@ -25,7 +25,7 @@ export const protect = async (req, res, next) => {
     // console.log('✅ User found:', req.user.email);
     next();
   } catch (err) {
-    // console.log('❌ Token verification failed:', err.message);
+    console.log('❌ Token verification failed:', err.message);
     res.status(401).json({ message: 'Token invalid or expired' });
   }
 };
