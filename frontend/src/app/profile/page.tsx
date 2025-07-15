@@ -20,22 +20,23 @@ import EditPersonalModal from '@/components/EditPersonalModal';
 import EditProfessionalModal from '@/components/EditProfessionalModal';
 import EditSocialModal from '@/components/EditSocialModal';
 import ProtectedRoute from '@/components/ProtectedRoute';
-// Shared types
 import {
   EducationItem,
   SocialData,
   UserProfile,
 } from '@/types';
 
-// UI components
+// UI helpers
 interface SectionCardProps { title: string; onEdit?: () => void; children: ReactNode; }
 const SectionCard: React.FC<SectionCardProps> = ({ title, onEdit, children }) => (
   <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{title}</h2>
-      {onEdit && <button onClick={onEdit} className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400">
-        <Pencil size={16} /><span className="ml-1">Edit</span>
-      </button>}
+      {onEdit && (
+        <button onClick={onEdit} className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400">
+          <Pencil size={16} /><span className="ml-1">Edit</span>
+        </button>
+      )}
     </div>
     <div className="space-y-2 text-gray-700 dark:text-gray-200">{children}</div>
   </div>
@@ -59,29 +60,37 @@ export default function ProfilePage() {
   const [socialOpen, setSocialOpen] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      // cast here after AuthProvider ensures shape
-      setUserData(user as unknown as UserProfile);
-    }
+    if (user) setUserData(user as UserProfile);
   }, [user]);
 
-  if (!userData) return <ProtectedRoute><div>Loading...</div></ProtectedRoute>;
-  const social: SocialData = userData?.social ?? { linkedIn: '', github: '' };
+  if (!userData) {
+    return <ProtectedRoute><div>Loading...</div></ProtectedRoute>;
+  }
+
+  // Provide defaults so inputs are always controlled
+  const social: SocialData = userData.social ?? { linkedIn: '', github: '' };
+  const educationItems: EducationItem[] = userData.education.map(e => ({
+    level: e.level,
+    institution: e.institution,
+    board: e.board ?? '',
+    score: e.score ?? '',
+    yearOfCompletion: e.yearOfCompletion,
+    degree: e.degree ?? '',
+    branch: e.branch ?? ''
+  }));
+
   const updateField = async (data: Partial<UserProfile>) => {
-    if (!userData) return;
-    
-    const updatedProfile: UserProfile = { ...userData, ...data };
-    await updateProfile(updatedProfile);
-    setUserData(updatedProfile);
+    const updated: UserProfile = { ...userData, ...data };
+    await updateProfile(updated);
+    setUserData(updated);
   };
 
   const completeness = Math.round(
-    ((!!userData.fullName && !!userData.gender && !!userData.phone ? 1 : 0) +
-     (userData.education.length ? 1 : 0) +
+    ((userData.fullName && userData.gender && userData.phone ? 1 : 0) +
+     (educationItems.length ? 1 : 0) +
      (userData.currentProfession ? 1 : 0) +
      ((social.linkedIn || social.github) ? 1 : 0) +
-     (userData.resumes.length ? 1 : 0))
-    /5 * 100
+     (userData.resumes?.length ? 1 : 0)) / 5 * 100
   );
 
   return (
@@ -115,14 +124,14 @@ export default function ProfilePage() {
         {/* Sections */}
         <SectionCard title="Personal Details" onEdit={() => setPersonalOpen(true)}>
           <KeyValue label="Full Name" value={userData.fullName} />
-          <KeyValue label="Gender" value={userData.gender} />
-          <KeyValue label="Phone" value={userData.phone} />
-          <KeyValue label="DOB" value={userData.dateOfBirth} />
-          <KeyValue label="Location" value={userData.location} />
+          <KeyValue label="Gender" value={userData.gender ?? ''} />
+          <KeyValue label="Phone" value={userData.phone ?? ''} />
+          <KeyValue label="DOB" value={userData.dateOfBirth ?? ''} />
+          <KeyValue label="Location" value={userData.location ?? ''} />
         </SectionCard>
 
         <SectionCard title="Education Details" onEdit={() => setEduOpen(true)}>
-          {userData.education.map((e, i) => (
+          {educationItems.map((e, i) => (
             <div key={i} className="p-3 bg-gray-50 dark:bg-gray-700 rounded mb-2">
               <KeyValue label="Level" value={e.level} />
               <KeyValue label="Institution" value={e.institution} />
@@ -133,8 +142,8 @@ export default function ProfilePage() {
         </SectionCard>
 
         <SectionCard title="Professional Status" onEdit={() => setProfOpen(true)}>
-          <KeyValue label="Profession" value={userData.currentProfession} />
-          <KeyValue label="Preferred Location" value={userData.preferredJobLocation} />
+          <KeyValue label="Profession" value={userData.currentProfession ?? ''} />
+          <KeyValue label="Preferred Location" value={userData.preferredJobLocation ?? ''} />
         </SectionCard>
 
         <SectionCard title="Social Details" onEdit={() => setSocialOpen(true)}>
@@ -143,7 +152,7 @@ export default function ProfilePage() {
         </SectionCard>
 
         <SectionCard title="Resume">
-          {userData.resumes.map((r, i) => (
+          {userData.resumes?.map((r, i) => (
             <div key={i} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded mb-2">
               <div>
                 <p>{r.variant} Resume</p>
@@ -157,10 +166,48 @@ export default function ProfilePage() {
         </SectionCard>
 
         {/* Modals */}
-        <EditPersonalModal isOpen={personalOpen} onClose={() => setPersonalOpen(false)} onSave={data => updateField(data as Partial<UserProfile>)} initialData={userData} />
-        <EditEducationModal isOpen={eduOpen} onClose={() => setEduOpen(false)} onSave={data => updateField({ education: data as EducationItem[] })} initialData={userData.education} />
-        <EditProfessionalModal isOpen={profOpen} onClose={() => setProfOpen(false)} onSave={data => updateField(data as Partial<UserProfile>)} initialData={{ currentProfession: userData.currentProfession, preferredJobLocation: userData.preferredJobLocation, areaOfExpertise: userData.areaOfExpertise }} />
-        <EditSocialModal isOpen={socialOpen} onClose={() => setSocialOpen(false)} onSave={data => updateField({ social: data as SocialData })} initialData={userData.social} />
+        <EditPersonalModal
+          isOpen={personalOpen}
+          onClose={() => setPersonalOpen(false)}
+          onSave={data => updateField(data as Partial<UserProfile>)}
+          initialData={{
+            fullName:      userData.fullName,
+            gender:        userData.gender ?? '',
+            dateOfBirth:   userData.dateOfBirth ?? '',
+            location:      userData.location ?? '',
+            phone:         userData.phone ?? '',
+            fatherName:    (userData as any).fatherName ?? '',
+            bio:           (userData as any).bio ?? '',
+          }}
+        />
+
+        <EditEducationModal
+          isOpen={eduOpen}
+          onClose={() => setEduOpen(false)}
+          onSave={data => updateField({ education: data as EducationItem[] })}
+          initialData={educationItems}
+        />
+
+        <EditProfessionalModal
+          isOpen={profOpen}
+          onClose={() => setProfOpen(false)}
+          onSave={data => updateField(data as Partial<UserProfile>)}
+          initialData={{
+            currentProfession:    userData.currentProfession ?? '',
+            preferredJobLocation: userData.preferredJobLocation ?? '',
+            areaOfExpertise:      userData.areaOfExpertise ?? '',
+          }}
+        />
+
+        <EditSocialModal
+          isOpen={socialOpen}
+          onClose={() => setSocialOpen(false)}
+          onSave={data => updateField({ social: data as SocialData })}
+          initialData={{
+            linkedIn: social.linkedIn,
+            github:   social.github,
+          }}
+        />
       </div>
     </ProtectedRoute>
   );
