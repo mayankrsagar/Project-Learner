@@ -66,9 +66,10 @@ export default function ProfilePage() {
   }, [user]);
 
   if (!userData) return <ProtectedRoute><div>Loading...</div></ProtectedRoute>;
-
+  const social: SocialData = userData?.social ?? { linkedIn: '', github: '' };
   const updateField = async (data: Partial<UserProfile>) => {
     if (!userData) return;
+    
     const updatedProfile: UserProfile = { ...userData, ...data };
     await updateProfile(updatedProfile);
     setUserData(updatedProfile);
@@ -78,7 +79,7 @@ export default function ProfilePage() {
     ((!!userData.fullName && !!userData.gender && !!userData.phone ? 1 : 0) +
      (userData.education.length ? 1 : 0) +
      (userData.currentProfession ? 1 : 0) +
-     ((userData.social.linkedIn || userData.social.github) ? 1 : 0) +
+     ((social.linkedIn || social.github) ? 1 : 0) +
      (userData.resumes.length ? 1 : 0))
     /5 * 100
   );
@@ -137,8 +138,8 @@ export default function ProfilePage() {
         </SectionCard>
 
         <SectionCard title="Social Details" onEdit={() => setSocialOpen(true)}>
-          <KeyValue label="LinkedIn" value={userData.social.linkedIn} />
-          <KeyValue label="GitHub" value={userData.social.github} />
+          <KeyValue label="LinkedIn" value={social.linkedIn} />
+          <KeyValue label="GitHub" value={social.github} />
         </SectionCard>
 
         <SectionCard title="Resume">
