@@ -1,4 +1,3 @@
-// app/profile/page.tsx
 "use client";
 
 import React, {
@@ -176,8 +175,8 @@ export default function ProfilePage() {
             dateOfBirth:   userData.dateOfBirth ?? '',
             location:      userData.location ?? '',
             phone:         userData.phone ?? '',
-            fatherName:    (userData as any).fatherName ?? '',
-            bio:           (userData as any).bio ?? '',
+            fatherName:    userData.fatherName ?? '',
+            bio:           userData.bio ?? '',
           }}
         />
 
