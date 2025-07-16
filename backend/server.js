@@ -7,6 +7,7 @@ import express from 'express';
 import connectDB from './config/db.js';
 import courseRoutes from './routes/courseRoutes.js';
 import CourseRoutes from './routes/courseRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import ProjectRoutes from './routes/projectRoutes.js';
 import UserRoutes from './routes/userRoutes.js';
 
@@ -33,7 +34,7 @@ app.use(express.json());
 app.use('/api/users', UserRoutes);
 app.use('/api/courses', CourseRoutes);
 app.use('/api/projects', ProjectRoutes);
-
+app.use('/api/payments', paymentRoutes);
 
 // Sprint Sequence: GET /api/courses/:courseId/sprints
 // Sprint Board: GET /api/courses/:courseId/sprints/:sprintId/sessions
