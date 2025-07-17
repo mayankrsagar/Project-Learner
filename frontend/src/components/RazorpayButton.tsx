@@ -50,10 +50,10 @@ export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps
   const handlePayment = async () => {
     try {
       // 1. create a new order on the backend
-      const { orderId, paymentToken } = (await fetchClient.post(
+      const { orderId } = (await fetchClient.post(
         '/api/payments/create-session',
         { courseId, amount }
-      )) as CreateSessionResponse;
+      )) as Partial<CreateSessionResponse>;
 
       // 2. configure Razorpay checkout
       const options: RazorpayOptions = {
