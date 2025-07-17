@@ -1,17 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Plus, Trash2 } from 'lucide-react';
 
-interface EducationItem {
-  level: string;
-  institution: string;
-  board: string;
-  score: string;
-  yearOfCompletion: number;
-  degree: string;
-  branch: string;
-}
+import {
+  Plus,
+  Trash2,
+  X,
+} from 'lucide-react';
+
+import { EducationItem } from '@/types';
 
 interface EditEducationModalProps {
   isOpen: boolean;

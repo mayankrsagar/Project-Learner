@@ -68,15 +68,16 @@ export default function ProfilePage() {
 
   // Provide defaults so inputs are always controlled
   const social: SocialData = userData.social ?? { linkedIn: '', github: '' };
-  const educationItems: EducationItem[] = userData.education.map(e => ({
-    level: e.level,
-    institution: e.institution,
-    board: e.board ?? '',
-    score: e.score ?? '',
-    yearOfCompletion: e.yearOfCompletion,
-    degree: e.degree ?? '',
-    branch: e.branch ?? ''
-  }));
+ const educationItems: EducationItem[] = userData.education?.map(e => ({
+  level: e.level,
+  institution: e.institution,
+  board: e.board ?? '',
+  score: e.score ?? '',
+  yearOfCompletion: e.yearOfCompletion,
+  degree: e.degree ?? '',
+  branch: e.branch ?? ''
+})) ?? [];
+
 
   const updateField = async (data: Partial<UserProfile>) => {
     const updated: UserProfile = { ...userData, ...data };
@@ -134,8 +135,8 @@ export default function ProfilePage() {
             <div key={i} className="p-3 bg-gray-50 dark:bg-gray-700 rounded mb-2">
               <KeyValue label="Level" value={e.level} />
               <KeyValue label="Institution" value={e.institution} />
-              <KeyValue label="Board" value={e.board} />
-              <KeyValue label="Score" value={e.score} />
+              <KeyValue label="Board" value={e.board ?? ''} />
+              <KeyValue label="Score" value={e.score ?? ""} />
             </div>
           ))}
         </SectionCard>

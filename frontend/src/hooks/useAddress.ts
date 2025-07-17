@@ -39,7 +39,7 @@ export function useAddress(): string {
         })
         .catch(() => setAddress("Unable to fetch address"));
     }
-  }, [coordinates]);
+  }, [coordinates, apiKey]);
 
   return address;
 }
