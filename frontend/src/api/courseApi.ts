@@ -2,8 +2,7 @@ import {
   Course,
   CreateCourseData,
   UpdateCourseData,
-} from '@/types';
-
+} from '../types';
 // src/api/courseApi.ts
 import fetchClient from './fetchClient';
 
