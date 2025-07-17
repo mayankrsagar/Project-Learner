@@ -45,9 +45,7 @@ export const login = async (req, res) => {
     await user.save({ validateBeforeSave: false }); // Skip validation in case password is untouched
 
     // Issue token
-    console.log('🔑 Issuing token for user:', user.email);
     issueToken(res, user);
-    console.log('🍪 Token cookie should be set now');
 
     // Send sanitized response
     const { password: _, ...safeUser } = user.toObject(); // remove password, retain others

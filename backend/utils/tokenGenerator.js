@@ -15,10 +15,5 @@ export const issueToken = (res, user) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     // domain: '.onrender.com', // optional, host-only is fine
   };
-
-  console.log('🍪 Setting cookie with options:', cookieOptions);
-  console.log('🌍 NODE_ENV:', process.env.NODE_ENV);
-  
   res.cookie('token', token, cookieOptions);
-  console.log('✅ Cookie set successfully');
 };

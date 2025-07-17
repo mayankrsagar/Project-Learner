@@ -1,3 +1,4 @@
+// src/components/RazorpayButton.tsx
 'use client';
 
 import React from 'react';
@@ -6,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import fetchClient from '@/api/fetchClient';
 
-// Add Razorpay types
+// Razorpay checkout options
 interface RazorpayOptions {
   key: string;
   amount: number;
@@ -14,30 +15,30 @@ interface RazorpayOptions {
   name: string;
   description: string;
   order_id: string;
-  handler: (response: PaymentResponse) => void;
-  prefill: {
-    name: string;
-    email: string;
-  };
-  theme: {
-    color: string;
-  };
+  handler: (response: PaymentVerificationRequest) => void;
+  prefill: { name: string; email: string };
+  theme: { color: string };
 }
 
-interface WindowWithRazorpay extends Window {
-  Razorpay: new (options: RazorpayOptions) => { open: () => void };
+declare global {
+  interface Window {
+    Razorpay: new (opts: RazorpayOptions) => { open(): void };
+  }
 }
 
 interface RazorpayButtonProps {
   courseId: string;
-  amount: number;
+  amount: number; // rupees
 }
 
-interface CreateOrderResponse {
+// Backend create-session response shape
+interface CreateSessionResponse {
   orderId: string;
+  paymentToken?: string;
 }
 
-interface PaymentResponse {
+// Payment handler payload
+interface PaymentVerificationRequest {
   razorpay_order_id: string;
   razorpay_payment_id: string;
   razorpay_signature: string;
@@ -48,48 +49,45 @@ export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps
 
   const handlePayment = async () => {
     try {
-      // 1. Create order on backend
-      const response = await fetchClient.post('/api/payments/create-session', {
-        courseId,
-        amount
-      }) as { data: CreateOrderResponse };
-      const { orderId } = response.data;
+      // 1. create a new order on the backend
+      const { orderId, paymentToken } = (await fetchClient.post(
+        '/api/payments/create-session',
+        { courseId, amount }
+      )) as CreateSessionResponse;
 
-      // 2. Configure Razorpay options
+      // 2. configure Razorpay checkout
       const options: RazorpayOptions = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? '',
-        amount: amount * 100, // in paise
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
+        amount: amount * 100,    // convert rupees to paise
         currency: 'INR',
         name: 'Project Learner',
         description: 'Course Purchase',
         order_id: orderId,
-        handler: async function (response: PaymentResponse) {
-          const res = await fetchClient.post('/api/payments/verify', {
-            orderId,
-            paymentResponse: response
-          }) as { data: { verified: boolean } };
+        handler: async (resp: PaymentVerificationRequest) => {
+          // verify payment on backend
+          const verify = await fetchClient.post(
+            '/api/payments/verify',
+            { orderId, paymentResponse: resp }
+          ) as { message: string; payment: { status: string } };
 
-          if (res.data.verified) {
+          if (verify.payment.status === 'completed') {
             alert('Payment successful!');
             router.refresh();
           } else {
-            alert('Verification failed');
+            alert('Payment verification failed');
           }
         },
-        prefill: {
-          name: '',
-          email: ''
-        },
-        theme: { color: '#3399cc' }
+        prefill: { name: '', email: '' },
+        theme: { color: '#3399cc' },
       };
 
-      // 4. Open Razorpay Checkout
-      const rzp = new ((window as unknown) as WindowWithRazorpay).Razorpay(options);
+      // 3. open Razorpay modal
+      const rzp = new window.Razorpay(options);
       rzp.open();
-    } catch (error: unknown) {
-      console.error('Payment error:', error);
-      const message = error instanceof Error ? error.message : 'Payment failed';
-      alert(message);
+
+    } catch (err: unknown) {
+      console.error('Payment error:', err);
+      alert(err instanceof Error ? err.message : 'Payment failed');
     }
   };
 

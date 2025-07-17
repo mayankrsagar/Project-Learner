@@ -15,7 +15,7 @@ export default function AddLinkPage() {
 
   const handleApply = () => {
     // TODO: submit to your API or Redux store
-    console.log({ url, title, description });
+
     // then navigate back to profile overview
     router.push("/profile");
   };
