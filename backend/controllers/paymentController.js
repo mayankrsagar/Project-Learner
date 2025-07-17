@@ -19,7 +19,7 @@ export const createSession = async (req, res) => {
 
 export const verifyPayment = async (req, res) => {
   const { orderId, paymentResponse } = req.body;
-  const verified = await gateway.verifyPayment(paymentResponse);
+  const verified = gateway.verifyPayment(paymentResponse);
   if (!verified) return res.status(400).json({ message: 'Payment verification failed' });
 
   const payment = await Payment.findOneAndUpdate(

@@ -22,7 +22,8 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.1",
-    "passport": "^0.7.0"
+    "passport": "^0.7.0",
+    "razorpay": "^2.9.6"
   },
   "devDependencies": {
     "eslint": "^9.30.0",

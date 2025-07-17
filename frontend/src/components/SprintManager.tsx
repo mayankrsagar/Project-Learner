@@ -88,59 +88,105 @@ const loadSprints = useCallback(async () => {
   };
 
   return (
-    <div>
-      <h2>Sprint Manager</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Code"
-          value={form.code}
-          onChange={(e) => setForm({ ...form, code: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Title"
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Order"
-          value={form.order}
-          onChange={(e) => setForm({ ...form, order: parseInt(e.target.value) })}
-          required
-        />
+    <div className="max-w-3xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800">Sprint Manager</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+  <div>
+    <label className="block text-sm font-medium text-gray-700">Code</label>
+    <input
+      type="text"
+      placeholder="Code"
+      value={form.code}
+      onChange={(e) => setForm({ ...form, code: e.target.value })}
+      required
+      className="w-full border rounded px-3 py-2 mt-1"
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium text-gray-700">Title</label>
+    <input
+      type="text"
+      placeholder="Title"
+      value={form.title}
+      onChange={(e) => setForm({ ...form, title: e.target.value })}
+      required
+      className="w-full border rounded px-3 py-2 mt-1"
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium text-gray-700">Order</label>
+    <input
+      type="number"
+      placeholder="Order"
+      value={form.order}
+      onChange={(e) => setForm({ ...form, order: parseInt(e.target.value) })}
+      required
+      className="w-full border rounded px-3 py-2 mt-1"
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium text-gray-700">Status</label>
+    <select
+      value={form.status}
+      onChange={(e) => setForm({ ...form, status: e.target.value })}
+      className="w-full border rounded px-3 py-2 mt-1"
+    >
+      <option value="Locked">Locked</option>
+      <option value="InProgress">In Progress</option>
+      <option value="Completed">Completed</option>
+      <option value="FellShort">Fell Short</option>
+    </select>
+  </div>
+
+  <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+    {editingId ? 'Update' : 'Create'}
+  </button>
+      </form>
+
+      <ul className="mt-6 space-y-4">
+  {sprints.map((sprint) => (
+    <li
+      key={sprint._id}
+      className="border rounded px-4 py-3 bg-gray-50 shadow-sm flex justify-between items-center"
+    >
+      <div>
+        <p className="font-medium text-gray-900">{sprint.code} - {sprint.title}</p>
+        <p className="text-sm text-gray-600">
+          Order: {sprint.order}, Status: {sprint.status}
+        </p>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => handleEdit(sprint)}
+          className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => handleDelete(sprint._id)}
+          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+        >
+          Delete
+        </button>
         <select
-          value={form.status}
-          onChange={(e) => setForm({ ...form, status: e.target.value })}
+          value={sprint.status}
+          onChange={(e) => handleStatusUpdate(sprint._id, e.target.value)}
+          className="border rounded px-2 py-1 text-sm"
         >
           <option value="Locked">Locked</option>
           <option value="InProgress">In Progress</option>
           <option value="Completed">Completed</option>
           <option value="FellShort">Fell Short</option>
         </select>
-        <button type="submit">{editingId ? 'Update' : 'Create'}</button>
-      </form>
-      <ul>
-        {sprints.map((sprint) => (
-          <li key={sprint._id}>
-            {sprint.code} - {sprint.title} (Order: {sprint.order}, Status: {sprint.status})
-            <button onClick={() => handleEdit(sprint)}>Edit</button>
-            <button onClick={() => handleDelete(sprint._id)}>Delete</button>
-            <select
-              value={sprint.status}
-              onChange={(e) => handleStatusUpdate(sprint._id, e.target.value)}
-            >
-              <option value="Locked">Locked</option>
-              <option value="InProgress">In Progress</option>
-              <option value="Completed">Completed</option>
-              <option value="FellShort">Fell Short</option>
-            </select>
-          </li>
-        ))}
+      </div>
+    </li>
+  ))}
       </ul>
+
     </div>
   );
 };
