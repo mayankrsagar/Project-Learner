@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 const paymentSchema = new mongoose.Schema({
   user:           { type: mongoose.Types.ObjectId, ref: 'User', required: true },
   course:         { type: mongoose.Types.ObjectId, ref: 'Course', required: true },
