@@ -12,7 +12,7 @@ import { UserProfile } from '@/types'; // Ensure correct path
 
 import { useUser } from '../hooks/useUser';
 
-interface AuthContextType {
+export default interface AuthContextType {
   user: UserProfile | null;
   isLoading: boolean;
   error: unknown;

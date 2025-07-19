@@ -34,6 +34,8 @@ app.use(express.json());
 app.use('/api/users', UserRoutes);
 app.use('/api/courses', CourseRoutes);
 app.use('/api/projects', ProjectRoutes);
+
+//Razorpay Payment Route
 app.use('/api/payments', paymentRoutes);
 
 // Sprint Sequence: GET /api/courses/:courseId/sprints

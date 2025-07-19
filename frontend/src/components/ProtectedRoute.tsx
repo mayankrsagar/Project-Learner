@@ -1,7 +1,13 @@
+// src/components/ProtectedRoute.tsx
 'use client';
 
-import React, { useEffect } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
 import { useRouter } from 'next/navigation';
+
 import { useAuth } from './AuthProvider';
 
 interface ProtectedRouteProps {
@@ -9,30 +15,36 @@ interface ProtectedRouteProps {
   fallback?: React.ReactNode;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  children, 
-  fallback = <div className="min-h-screen flex items-center justify-center">Loading...</div> 
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  fallback = <div className="min-h-screen flex items-center justify-center">Loading...</div>,
 }) => {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
+  const [hasMounted, setHasMounted] = useState(false);
+
+  // Ensure this component only runs redirect logic after client mount
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/login');
+    if (hasMounted && !isLoading && !isAuthenticated) {
+      router.replace('/login');
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [hasMounted, isLoading, isAuthenticated, router]);
 
   // Show loading while checking authentication
-  if (isLoading) {
+  if (isLoading || !hasMounted) {
     return <>{fallback}</>;
   }
 
-  // If not authenticated, don't render anything (redirect is happening)
+  // If not authenticated, don't render children (we're redirecting)
   if (!isAuthenticated) {
     return null;
   }
 
-  // If authenticated, render the children
+  // Authenticated: render children
   return <>{children}</>;
 };
 

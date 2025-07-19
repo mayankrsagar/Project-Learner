@@ -1,4 +1,3 @@
-// src/components/RazorpayButton.tsx
 'use client';
 
 import React from 'react';
@@ -7,7 +6,8 @@ import { useRouter } from 'next/navigation';
 
 import fetchClient from '@/api/fetchClient';
 
-// Razorpay checkout options
+import { useAuth } from './AuthProvider'; // ✅ Correct import
+
 interface RazorpayOptions {
   key: string;
   amount: number;
@@ -31,13 +31,11 @@ interface RazorpayButtonProps {
   amount: number; // rupees
 }
 
-// Backend create-session response shape
 interface CreateSessionResponse {
   orderId: string;
   paymentToken?: string;
 }
 
-// Payment handler payload
 interface PaymentVerificationRequest {
   razorpay_order_id: string;
   razorpay_payment_id: string;
@@ -46,32 +44,35 @@ interface PaymentVerificationRequest {
 
 export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps) {
   const router = useRouter();
+  const { user } = useAuth(); // ✅ No need for Pick
 
   const handlePayment = async () => {
     try {
-      // 1. create a new order on the backend
-     type OrderResponse = Pick<CreateSessionResponse, 'orderId'>;
+      if (!user?._id) {
+        alert('User not authenticated');
+        return;
+      }
 
-const { orderId } = await fetchClient.post(
-  '/api/payments/create-session',
-  { courseId, amount }
-) as OrderResponse;
+      // 1. Create order
+      const { orderId } = await fetchClient.post('/api/payments/create-session', {
+        courseId,
+        amount,
+        userId: user._id, // ✅ safer to rename here
+      }) as CreateSessionResponse;
 
-
-      // 2. configure Razorpay checkout
+      // 2. Configure Razorpay
       const options: RazorpayOptions = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
-        amount: amount * 100,    // convert rupees to paise
+        amount: amount * 100,
         currency: 'INR',
         name: 'Project Learner',
         description: 'Course Purchase',
-        order_id: orderId ?? '',
+        order_id: orderId,
         handler: async (resp: PaymentVerificationRequest) => {
-          // verify payment on backend
-          const verify = await fetchClient.post(
-            '/api/payments/verify',
-            { orderId, paymentResponse: resp }
-          ) as { message: string; payment: { status: string } };
+          const verify = await fetchClient.post('/api/payments/verify', {
+            orderId,
+            paymentResponse: resp,
+          }) as { message: string; payment: { status: string } };
 
           if (verify.payment.status === 'completed') {
             alert('Payment successful!');
@@ -80,11 +81,14 @@ const { orderId } = await fetchClient.post(
             alert('Payment verification failed');
           }
         },
-        prefill: { name: '', email: '' },
+        prefill: {
+          name: user.fullName || '',
+          email: user.email || '',
+        },
         theme: { color: '#3399cc' },
       };
 
-      // 3. open Razorpay modal
+      // 3. Open Razorpay modal
       const rzp = new window.Razorpay(options);
       rzp.open();
 
