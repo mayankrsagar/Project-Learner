@@ -7,17 +7,20 @@ const razorpay = new Razorpay({
 });
 
 export default {
-  createOrder: ({ amount, currency, metadata }) =>
-    razorpay.orders.create({
-      amount: amount * 100,
+ createOrder: async ({ amount, currency, metadata }) => {
+    // generate a unique receipt ID
+    const receipt = `rcpt_${metadata.userId}_${Date.now()}`;
+
+    return razorpay.orders.create({
+      amount:  amount * 100,
       currency,
-      receipt: metadata.orderId,
+      receipt,           // ← now always defined
       notes: metadata,
-    }),
+    });
+  },
 
   verifyPayment: (paymentResponse) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = paymentResponse;
-
     const signatureData = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSignature = crypto
       .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
