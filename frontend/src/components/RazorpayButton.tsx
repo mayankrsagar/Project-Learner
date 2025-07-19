@@ -55,11 +55,19 @@ export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps
 
       // 1. Create order
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { orderId,paymentToken } = await fetchClient.post('/api/payments/create-session', {
-        courseId,
-        amount,
-        userId: user._id, // ✅ safer to rename here
-      }) as CreateSessionResponse;
+      // const { orderId,paymentToken } = await fetchClient.post('/api/payments/create-session', {
+      //   courseId,
+      //   amount,
+      //   // userId: user._id, // ✅ safer to rename here
+      // }) as CreateSessionResponse;
+
+      // components/RazorpayButton.tsx
+const {orderId} = await fetchClient.post('/api/payments/create-session', {
+  courseId,
+  amount
+}) as CreateSessionResponse;
+// const { orderId } = response as CreateSessionResponse;
+
 
       // 2. Configure Razorpay
       const options: RazorpayOptions = {
