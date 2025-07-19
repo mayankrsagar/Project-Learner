@@ -6,7 +6,7 @@ import gateway
 export const createSession = async (req, res) => {
   const userId   = req.user.id;           // from protect()
   const { courseId, amount } = req.body;
-
+console.log('🔥 createSession body:', req.body, 'user:', req.user);
   const order = await gateway.createOrder({
     amount,
     currency: 'INR',
