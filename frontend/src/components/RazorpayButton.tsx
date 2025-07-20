@@ -1,3 +1,4 @@
+// src/components/RazorpayButton.tsx
 'use client';
 
 import React from 'react';
@@ -6,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import fetchClient from '@/api/fetchClient';
 
-import { useAuth } from './AuthProvider'; // ✅ Correct import
+import { useAuth } from './AuthProvider';
 
 interface RazorpayOptions {
   key: string;
@@ -44,32 +45,30 @@ interface PaymentVerificationRequest {
 
 export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps) {
   const router = useRouter();
-  const { user } = useAuth(); // ✅ No need for Pick
+  const { user } = useAuth();
 
   const handlePayment = async () => {
     try {
       if (!user?._id) {
+        console.warn('[Razorpay] user not logged in');
         alert('User not authenticated');
         return;
       }
 
-      // 1. Create order
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      // const { orderId,paymentToken } = await fetchClient.post('/api/payments/create-session', {
-      //   courseId,
-      //   amount,
-      //   // userId: user._id, // ✅ safer to rename here
-      // }) as CreateSessionResponse;
+      console.log('[Razorpay] creating session with', { courseId, amount, userId: user._id });
+      const sessionResponse = await fetchClient.post(
+        '/api/payments/create-session',
+        { courseId, amount }
+      ) as CreateSessionResponse;
+      console.log('[Razorpay] session response:', sessionResponse);
 
-      // components/RazorpayButton.tsx
-const {orderId} = await fetchClient.post('/api/payments/create-session', {
-  courseId,
-  amount
-}) as CreateSessionResponse;
-// const { orderId } = response as CreateSessionResponse;
+      const { orderId } = sessionResponse;
+      if (!orderId) {
+        console.error('[Razorpay] missing orderId in response', sessionResponse);
+        alert('Failed to create payment session');
+        return;
+      }
 
-
-      // 2. Configure Razorpay
       const options: RazorpayOptions = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
         amount: amount * 100,
@@ -78,12 +77,15 @@ const {orderId} = await fetchClient.post('/api/payments/create-session', {
         description: 'Course Purchase',
         order_id: orderId,
         handler: async (resp: PaymentVerificationRequest) => {
-          const verify = await fetchClient.post('/api/payments/verify', {
-            orderId,
-            paymentResponse: resp,
-          }) as { message: string; payment: { status: string } };
-
-          if (verify.payment.status === 'completed') {
+          console.log('[Razorpay] payment completed callback', resp);
+          const verifyPayload = { orderId, paymentResponse: resp };
+          console.log('[Razorpay] verifying payment', verifyPayload);
+          const verifyResponse = await fetchClient.post(
+            '/api/payments/verify',
+            verifyPayload
+          );
+          console.log('[Razorpay] verify response:', verifyResponse);
+          if ((verifyResponse as any).payment?.status === 'completed') {
             alert('Payment successful!');
             router.refresh();
           } else {
@@ -92,17 +94,16 @@ const {orderId} = await fetchClient.post('/api/payments/create-session', {
         },
         prefill: {
           name: user.fullName || '',
-          email: user.email || '',
+          email: user.email || ''
         },
-        theme: { color: '#3399cc' },
+        theme: { color: '#3399cc' }
       };
 
-      // 3. Open Razorpay modal
+      console.log('[Razorpay] opening checkout with options', options);
       const rzp = new window.Razorpay(options);
       rzp.open();
-
     } catch (err: unknown) {
-      console.error('Payment error:', err);
+      console.error('[Razorpay] error in handlePayment:', err);
       alert(err instanceof Error ? err.message : 'Payment failed');
     }
   };
