@@ -6,6 +6,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 
 import fetchClient from '@/api/fetchClient';
+import { Payment } from '@/types';
 
 import { useAuth } from './AuthProvider';
 
@@ -86,8 +87,8 @@ export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps
             '/api/payments/verify',
             verifyPayload
           );
-          console.log('[Razorpay] verify response:', verifyResponse);
-          if ((verifyResponse as any).payment?.status === 'completed') {
+          // console.log('[Razorpay] verify response:', verifyResponse);
+          if ((verifyResponse as { payment: Payment,message: string }).payment?.status === 'completed') {
             alert('Payment successful!');
             router.refresh();
           } else {

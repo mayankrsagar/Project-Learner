@@ -100,8 +100,17 @@ export interface Badge {
   awardedAt: string;
 }
 
-
-
+export interface Payment{
+  _id: string;
+  user: string;
+  course: string;
+  orderId: string;
+  transactionId: string;
+  amount: number;
+  status: 'pending' | 'completed' | 'failed';
+  createdAt: string;
+  updatedAt: string;
+}
 export interface Sprint {
   _id: string;
   course: string;
