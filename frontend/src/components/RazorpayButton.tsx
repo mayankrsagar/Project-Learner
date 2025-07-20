@@ -17,7 +17,7 @@ interface RazorpayOptions {
   description: string;
   order_id: string;
   handler: (response: PaymentVerificationRequest) => void;
-  prefill: { name: string; email: string };
+  prefill: { name: string; email: string, phone: string };
   theme: { color: string };
 }
 
@@ -47,6 +47,8 @@ export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps
   const router = useRouter();
   const { user } = useAuth();
 
+  console.log("Amount is ")
+  console.log(amount);
   const handlePayment = async () => {
     try {
       if (!user?._id) {
@@ -94,8 +96,9 @@ export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps
         },
         prefill: {
           name: user.fullName || '',
-          email: user.email || ''
-        },
+          email: user.email || '',
+          phone: user.phone || "",
+        }, 
         theme: { color: '#3399cc' }
       };
 
@@ -117,3 +120,4 @@ export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps
     </button>
   );
 }
+
