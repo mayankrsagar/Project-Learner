@@ -4,6 +4,23 @@ import { Payment } from '../models/Payment.js';
 import User from '../models/User.js';
 import gateway from '../utils/paymentGateway.js'; // Razorpay SDK wrapper
 
+/**
+ * Creates a payment session for a user purchasing a course.
+ *
+ * This function validates the request, creates an order using the Razorpay
+ * gateway, and saves the payment details to the database. The order details
+ * including the order ID are returned in the response.
+ *
+ * @param {Object} req - The request object, containing user and body with courseId and amount.
+ * @param {Object} res - The response object used to send back the order ID or error messages.
+ * @param {Function} next - The next middleware function in the stack.
+ *
+ * @returns {Object} JSON response containing the created order ID or an error message.
+ *
+ * @throws {Error} If there are validation errors, Razorpay order creation fails,
+ *                 or saving to the database fails.
+ */
+
 export const createSession = async (req, res, next) => {
   try {
     const userId = req.user?.id;
