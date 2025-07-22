@@ -18,7 +18,7 @@ interface RazorpayOptions {
   description: string;
   order_id: string;
   handler: (response: PaymentVerificationRequest) => void;
-  prefill: { name: string; email: string, phone: string };
+  prefill: { name: string; email: string; phone: string };
   theme: { color: string };
 }
 
@@ -48,8 +48,6 @@ export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps
   const router = useRouter();
   const { user } = useAuth();
 
-  console.log("Amount is ")
-  console.log(amount);
   const handlePayment = async () => {
     try {
       if (!user?._id) {
@@ -58,13 +56,10 @@ export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps
         return;
       }
 
-      console.log('[Razorpay] creating session with', { courseId, amount, userId: user._id });
       const sessionResponse = await fetchClient.post(
         '/api/payments/create-session',
-        { courseId, amount }
+        { courseId, amount, userId: user._id }
       ) as CreateSessionResponse;
-      console.log('[Razorpay] session response:', sessionResponse);
-
       const { orderId } = sessionResponse;
       if (!orderId) {
         console.error('[Razorpay] missing orderId in response', sessionResponse);
@@ -80,15 +75,12 @@ export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps
         description: 'Course Purchase',
         order_id: orderId,
         handler: async (resp: PaymentVerificationRequest) => {
-          console.log('[Razorpay] payment completed callback', resp);
           const verifyPayload = { orderId, paymentResponse: resp };
-          console.log('[Razorpay] verifying payment', verifyPayload);
           const verifyResponse = await fetchClient.post(
             '/api/payments/verify',
             verifyPayload
           );
-          // console.log('[Razorpay] verify response:', verifyResponse);
-          if ((verifyResponse as { payment: Payment,message: string }).payment?.status === 'completed') {
+          if ((verifyResponse as { payment: Payment, message: string }).payment?.status === 'completed') {
             alert('Payment successful!');
             router.refresh();
           } else {
@@ -98,12 +90,11 @@ export default function RazorpayButton({ courseId, amount }: RazorpayButtonProps
         prefill: {
           name: user.fullName || '',
           email: user.email || '',
-          phone: user.phone || "",
-        }, 
+          phone: user.phone || '',
+        },
         theme: { color: '#3399cc' }
       };
 
-      console.log('[Razorpay] opening checkout with options', options);
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (err: unknown) {
