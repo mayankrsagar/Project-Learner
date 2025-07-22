@@ -5,6 +5,7 @@ import RazorpayPkg from 'razorpay';
 function getRazorpay() {
   const keyId = process.env.RAZORPAY_KEY_ID;
   const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  console.log("Env:", process.env.RAZORPAY_KEY_ID, process.env.RAZORPAY_KEY_SECRET);
   if (!keyId || !keySecret) {
     throw new Error('Missing RAZORPAY_KEY_ID or RAZORPAY_KEY_SECRET environment variables');
   }
