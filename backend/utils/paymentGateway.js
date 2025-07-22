@@ -22,7 +22,9 @@ export default {
    */
   createOrder: async ({ amount, currency, metadata }) => {
     const razorpay = getRazorpay();
-    const receipt = `rcpt_${metadata.userId}_${Date.now()}`;
+    const userIdShort = metadata.userId.toString().slice(-6); // last 6 chars
+    const receipt = `rcpt_${userIdShort}_${Date.now()}`.slice(0, 40);
+
     const options = {
       amount: amount * 100,
       currency,
