@@ -333,17 +333,56 @@ export interface Task {
   link?: string;
 }
 
+// src/types/index.ts
+
+/**
+ * Full Session model returned from the API
+ */
 export interface Session {
   _id: string;
-  sprint: string; // or Sprint if populated
+  sprint: string;            // Sprint ObjectId
   title: string;
   recordingUrl?: string;
   durationMinutes?: number;
   watchedPercent: number;
   slidesUrl?: string;
   agendaUrl?: string;
-  tasks: Task[];
+  tasks: SessionTask[];
   createdAt: string;
   updatedAt: string;
 }
+
+export interface SessionTask {
+  description: string;
+  type: 'Activity' | 'Quiz' | 'Project';
+  completed: boolean;
+  link?: string;
+}
+
+/**
+ * Payload to create a new Session
+ */
+export interface SessionCreate {
+  title: string;
+  recordingUrl?: string;
+  durationMinutes?: number;
+  slidesUrl?: string;
+  agendaUrl?: string;
+  tasks?: SessionTask[];
+}
+
+/**
+ * Payload to update an existing Session
+ * All fields are optional so you can do partial updates
+ */
+export interface SessionUpdate {
+  title?: string;
+  recordingUrl?: string;
+  durationMinutes?: number;
+  watchedPercent?: number;
+  slidesUrl?: string;
+  agendaUrl?: string;
+  tasks?: SessionTask[];
+}
+
 

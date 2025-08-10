@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useEffect } from 'react';
 
@@ -36,7 +36,6 @@ const Navbar = () => {
     try {
       await logoutUser();
       router.push('/login');
-      // dispatch(toggleMobileMenu(false));
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -47,36 +46,48 @@ const Navbar = () => {
   }, [darkMode]);
 
   return (
-    <nav className="w-full bg-white dark:bg-gray-900 text-gray-800 dark:text-white shadow p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link href="/" className="text-xl font-bold">Project Learner</Link>
+    <nav className="sticky top-0 z-50 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md text-gray-800 dark:text-white shadow-md px-4 py-3">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        {/* Brand */}
+        <Link href="/" className="text-2xl font-bold tracking-tight hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+          Project Learner
+        </Link>
 
-        {/* Mobile Hamburger */}
-        <div className="md:hidden">
-          <button onClick={() => dispatch(toggleMobileMenu())}>☰</button>
-        </div>
+        {/* Mobile Menu Toggle */}
+        <button
+          className="md:hidden text-2xl"
+          onClick={() => dispatch(toggleMobileMenu())}
+          aria-label="Toggle menu"
+        >
+          ☰
+        </button>
 
-        {/* Menu Items */}
-        <div className={`flex-col md:flex md:flex-row md:items-center ${menuOpen ? 'flex' : 'hidden'} md:space-x-6 space-y-4 md:space-y-0 mt-4 md:mt-0`}>
-
-          <Link href="/portfolio" className="hover:underline">Portfolio</Link>
+        {/* Main Menu */}
+        <div className={`flex-col md:flex md:flex-row md:items-center ${menuOpen ? 'flex' : 'hidden'} md:space-x-6 space-y-4 md:space-y-0 mt-4 md:mt-0 text-base`}>
+          <Link href="/portfolio" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Portfolio</Link>
 
           {/* Theme Toggle */}
-          <button onClick={() => dispatch(toggleDarkMode())} className="flex items-center gap-1">
+          <button
+            onClick={() => dispatch(toggleDarkMode())}
+            className="flex items-center gap-2 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+          >
             {darkMode ? <Sun size={18} /> : <Moon size={18} />} Theme
           </button>
 
-          {/* Settings Dropdown */}
+          {/* Auth Settings */}
           {user && (
-            <div className="relative inline-block group">
-              <button className="flex items-center gap-1 focus:outline-none">
+            <div className="relative group">
+              <button className="flex items-center gap-2 font-medium focus:outline-none">
                 Hello, {user.fullName} ▾
               </button>
-              <div className="opacity-0 invisible group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-opacity absolute right-0 top-0 mt-2 bg-white dark:bg-gray-800 shadow rounded w-40 z-10">
+              <div className="absolute right-0 w-40 bg-white dark:bg-gray-800 shadow-lg rounded-lg transition-opacity opacity-0 invisible group-hover:opacity-100 group-hover:visible z-20">
                 <Link href="/profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
                   <User size={16} /> Profile
                 </Link>
-                <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                >
                   <LogOut size={16} /> Logout
                 </button>
               </div>
@@ -84,7 +95,9 @@ const Navbar = () => {
           )}
 
           {/* Live Timer */}
-          <div className="text-sm font-mono"><Timer /></div>
+          <div className="text-sm font-mono">
+            <Timer />
+          </div>
         </div>
       </div>
     </nav>

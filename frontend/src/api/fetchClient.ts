@@ -1,11 +1,10 @@
-// src/api/fetchClient.ts
-// const baseURL =
-//   process.env.NEXT_PUBLIC_API_BASE_URL ||
-//   process.env.NEXT_PUBLIC_API_URL ||
-//   (typeof window !== 'undefined'
-//     ? window.location.origin
-//     : 'https://project-learner.onrender.com');
-const baseURL = 'https://project-learner.onrender.com';
+const baseURL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== 'undefined'
+    ? window.location.origin
+    : 'https://project-learner.onrender.com');
+
 
 interface FetchOptions extends RequestInit {
   timeout?: number;
@@ -74,7 +73,7 @@ class FetchClient {
       }
       if (err instanceof TypeError) {
         console.error('Network error:', err.message);
-        throw new Error('Network error – please check your connection');
+        throw new Error('Network error - please check your connection');
       }
       if (err instanceof Error) {
         throw err;
