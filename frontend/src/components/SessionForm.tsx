@@ -1,12 +1,8 @@
 "use client";
 
-import React from 'react';
+import React from "react";
 
-import {
-  Session,
-  SessionCreate,
-  SessionTask,
-} from '@/types';
+import { Session, SessionCreate, SessionTask } from "@/types";
 
 interface SessionFormModalProps {
   initial?: SessionCreate | Session;
@@ -25,14 +21,23 @@ const defaultValues: SessionCreate = {
 
 const toSessionCreate = (init?: SessionCreate | Session): SessionCreate => {
   if (!init) return { ...defaultValues };
+
+  // treat incoming object as SessionCreate-like; Session includes compatible fields
+  const src = init as SessionCreate;
+
   return {
-    title: (init as any).title ?? "",
-    recordingUrl: (init as any).recordingUrl ?? "",
-    durationMinutes: (init as any).durationMinutes ?? 0,
-    slidesUrl: (init as any).slidesUrl ?? "",
-    agendaUrl: (init as any).agendaUrl ?? "",
-    tasks: Array.isArray((init as any).tasks)
-      ? (init as any).tasks.map((t: SessionTask) => ({ ...t }))
+    title: src.title ?? "",
+    recordingUrl: src.recordingUrl ?? "",
+    durationMinutes: src.durationMinutes ?? 0,
+    slidesUrl: src.slidesUrl ?? "",
+    agendaUrl: src.agendaUrl ?? "",
+    tasks: Array.isArray(src.tasks)
+      ? src.tasks.map((t) => ({
+          description: t.description ?? "",
+          type: t.type ?? "Activity",
+          completed: Boolean(t.completed),
+          link: t.link,
+        }))
       : [],
   };
 };
@@ -52,9 +57,14 @@ const SessionFormModal: React.FC<SessionFormModalProps> = ({
 
   const handleChange =
     (k: keyof SessionCreate) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-      const value = e.target.type === "number" ? Number(e.target.value) : e.target.value;
-      setForm({ ...form, [k]: value as any });
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >
+    ) => {
+      const value =
+        e.target.type === "number" ? Number(e.target.value) : e.target.value;
+      setForm((prev) => ({ ...prev, [k]: value as unknown }));
     };
 
   const handleTaskChange = (
@@ -63,20 +73,50 @@ const SessionFormModal: React.FC<SessionFormModalProps> = ({
     value: string | boolean
   ) => {
     const tasks = [...(form.tasks ?? [])];
-    const t = { ...(tasks[idx] ?? { description: "", type: "Activity", completed: false }) } as SessionTask;
-    (t as any)[key] = value;
+    const existing = tasks[idx] ?? {
+      description: "",
+      type: "Activity" as SessionTask["type"],
+      completed: false,
+    };
+
+    const t: SessionTask = { ...existing };
+
+    // Narrow the assignment based on key so we don't need `any`
+    switch (key) {
+      case "completed":
+        t.completed = Boolean(value);
+        break;
+      case "type":
+        // ensure value fits allowed types
+        t.type = value as SessionTask["type"];
+        break;
+      case "link":
+        t.link = String(value) || undefined;
+        break;
+      case "description":
+      default:
+        t.description = String(value);
+        break;
+    }
+
     tasks[idx] = t;
-    setForm({ ...form, tasks });
+    setForm((prev) => ({ ...prev, tasks }));
   };
 
   const addTask = () => {
-    setForm({ ...form, tasks: [...(form.tasks ?? []), { description: "", type: "Activity", completed: false }] });
+    setForm((prev) => ({
+      ...prev,
+      tasks: [
+        ...(prev.tasks ?? []),
+        { description: "", type: "Activity", completed: false } as SessionTask,
+      ],
+    }));
   };
 
   const removeTask = (idx: number) => {
     const tasks = [...(form.tasks ?? [])];
     tasks.splice(idx, 1);
-    setForm({ ...form, tasks });
+    setForm((prev) => ({ ...prev, tasks }));
   };
 
   const handleSubmit: React.FormEventHandler = async (e) => {
@@ -132,7 +172,10 @@ const SessionFormModal: React.FC<SessionFormModalProps> = ({
               min={0}
               value={form.durationMinutes ?? 0}
               onChange={(e) =>
-                setForm({ ...form, durationMinutes: Number(e.target.value) || 0 })
+                setForm((prev) => ({
+                  ...prev,
+                  durationMinutes: Number(e.target.value) || 0,
+                }))
               }
               className="w-full border rounded px-3 py-2 mt-1"
             />
@@ -187,7 +230,9 @@ const SessionFormModal: React.FC<SessionFormModalProps> = ({
                     <input
                       type="text"
                       value={t.description}
-                      onChange={(e) => handleTaskChange(idx, "description", e.target.value)}
+                      onChange={(e) =>
+                        handleTaskChange(idx, "description", e.target.value)
+                      }
                       className="w-full border rounded px-2 py-1 mt-1"
                     />
                   </div>
@@ -196,7 +241,9 @@ const SessionFormModal: React.FC<SessionFormModalProps> = ({
                     <label className="block text-xs">Type</label>
                     <select
                       value={t.type}
-                      onChange={(e) => handleTaskChange(idx, "type", e.target.value)}
+                      onChange={(e) =>
+                        handleTaskChange(idx, "type", e.target.value)
+                      }
                       className="w-full border rounded px-2 py-1 mt-1"
                     >
                       <option value="Activity">Activity</option>
@@ -210,7 +257,9 @@ const SessionFormModal: React.FC<SessionFormModalProps> = ({
                     <input
                       type="url"
                       value={t.link ?? ""}
-                      onChange={(e) => handleTaskChange(idx, "link", e.target.value)}
+                      onChange={(e) =>
+                        handleTaskChange(idx, "link", e.target.value)
+                      }
                       className="w-full border rounded px-2 py-1 mt-1"
                     />
                   </div>
@@ -220,7 +269,9 @@ const SessionFormModal: React.FC<SessionFormModalProps> = ({
                     <input
                       type="checkbox"
                       checked={Boolean(t.completed)}
-                      onChange={(e) => handleTaskChange(idx, "completed", e.target.checked)}
+                      onChange={(e) =>
+                        handleTaskChange(idx, "completed", e.target.checked)
+                      }
                       className="mt-1"
                     />
                   </div>
