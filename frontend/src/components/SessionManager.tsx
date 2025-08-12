@@ -1,35 +1,21 @@
 "use client";
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  BookOpen,
-  Filter,
-  Users,
-} from 'lucide-react';
+import { BookOpen, Filter, Users } from "lucide-react";
 
-import { Sprint } from '@/types';
-import { Button } from '@/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/ui/card';
-import { Checkbox } from '@/ui/checkbox';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/ui/tabs';
+import { Sprint } from "@/types";
+import { Button } from "@/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
+import { Checkbox } from "@/ui/checkbox";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
 
-import { SessionCard } from './SessionCard';
-import { SessionDetail } from './SessionDetail';
+import { SessionCard } from "./SessionCard";
+import { SessionDetail } from "./SessionDetail";
 
 interface Task {
   _id: string;
   description: string;
-  type: 'Activity' | 'Quiz' | 'Project';
+  type: "Activity" | "Quiz" | "Project";
   completed: boolean;
   link?: string;
 }
@@ -56,67 +42,68 @@ interface SessionManagerProps {
   onSprintSelectionChange?: (sprintIds: string[]) => void;
 }
 
-
-
-export function SessionManager({ 
+export function SessionManager({
   courseId,
   sessions,
-  sessionId, 
-  sprints, 
-  selectedSprints, 
-  onSprintSelectionChange 
+  sessionId,
+  sprints,
+  selectedSprints,
+  onSprintSelectionChange,
 }: SessionManagerProps) {
+  // silence unused-var lint errors if you don't need these yet
+  void courseId;
+  void sessionId;
+
   const [selectedSession, setSelectedSession] = useState<Session | null>(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
+  const filteredSessions =
+    sessions?.filter((session) =>
+      selectedSprints?.includes(session.sprint._id)
+    ) ?? [];
 
-  // const filteredSessions = sessions.filter(session => 
-  //   selectedSprints.includes(session.sprint._id)
-  // );
-  const filteredSessions = sessions?.filter(session => 
-  selectedSprints?.includes(session.sprint._id)
-) ?? [];
-
-
-  // const handleSprintToggle = (sprintId: string) => {
-  //   if (selectedSprints.includes(sprintId)) {
-  //     onSprintSelectionChange(selectedSprints.filter(id => id !== sprintId));
-  //   } else {
-  //     onSprintSelectionChange([...selectedSprints, sprintId]);
-  //   }
-  // };
   const handleSprintToggle = (sprintId: string) => {
-  if (!selectedSprints || !onSprintSelectionChange) return;
+    if (!selectedSprints || !onSprintSelectionChange) return;
 
-  const updated = selectedSprints.includes(sprintId)
-    ? selectedSprints.filter(id => id !== sprintId)
-    : [...selectedSprints, sprintId];
+    const updated = selectedSprints.includes(sprintId)
+      ? selectedSprints.filter((id) => id !== sprintId)
+      : [...selectedSprints, sprintId];
 
-  onSprintSelectionChange(updated);
-};
+    onSprintSelectionChange(updated);
+  };
 
-
-  // const totalSessions = filteredSessions.length;
-  // const completedSessions = filteredSessions.filter(s => s.watchedPercent >= 90).length;
-  // const totalTasks = filteredSessions.reduce((acc, s) => acc + s.tasks.length, 0);
-  // const completedTasks = filteredSessions.reduce((acc, s) => 
-  //   acc + s.tasks.filter(t => t.completed).length, 0
-  // );
-    const totalSessions = filteredSessions.length;
-const completedSessions = filteredSessions.filter(s => s.watchedPercent >= 90).length;
-const totalTasks = filteredSessions.reduce((acc, s) => acc + s.tasks.length, 0);
-const completedTasks = filteredSessions.reduce((acc, s) => 
-  acc + s.tasks.filter(t => t.completed).length, 0
-);
+  const totalSessions = filteredSessions.length;
+  const completedSessions = filteredSessions.filter(
+    (s) => s.watchedPercent >= 90
+  ).length;
+  const totalTasks = filteredSessions.reduce(
+    (acc, s) => acc + s.tasks.length,
+    0
+  );
+  const completedTasks = filteredSessions.reduce(
+    (acc, s) => acc + s.tasks.filter((t) => t.completed).length,
+    0
+  );
 
   if (selectedSession) {
     return (
-      <SessionDetail 
-        session={selectedSession}
+      <SessionDetail
+        session={{
+          ...selectedSession,
+          sprint: {
+            _id: selectedSession.sprint._id,
+            name: selectedSession.sprint.title, // Map 'title' to 'name'
+          },
+        }}
         onBack={() => setSelectedSession(null)}
         onUpdateSession={(updatedSession) => {
-          // This would update the session in your backend
-          setSelectedSession(updatedSession);
+          setSelectedSession({
+            ...updatedSession,
+            sprint: {
+              ...selectedSession.sprint,
+              title: updatedSession.sprint.name, // Map 'name' back to 'title' if needed
+            },
+          });
         }}
       />
     );
@@ -134,16 +121,16 @@ const completedTasks = filteredSessions.reduce((acc, s) =>
         </div>
         <div className="flex items-center gap-2">
           <Button
-            variant={viewMode === 'grid' ? 'default' : 'outline'}
+            variant={viewMode === "grid" ? "default" : "outline"}
             size="sm"
-            onClick={() => setViewMode('grid')}
+            onClick={() => setViewMode("grid")}
           >
             Grid
           </Button>
           <Button
-            variant={viewMode === 'list' ? 'default' : 'outline'}
+            variant={viewMode === "list" ? "default" : "outline"}
             size="sm"
-            onClick={() => setViewMode('list')}
+            onClick={() => setViewMode("list")}
           >
             List
           </Button>
@@ -157,19 +144,25 @@ const completedTasks = filteredSessions.reduce((acc, s) =>
             <div className="flex items-center gap-2">
               <BookOpen className="h-4 w-4 text-primary" />
               <div>
-                <p className="text-2xl font-semibold">{completedSessions}/{totalSessions}</p>
-                <p className="text-sm text-muted-foreground">Sessions Completed</p>
+                <p className="text-2xl font-semibold">
+                  {completedSessions}/{totalSessions}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Sessions Completed
+                </p>
               </div>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4 text-primary" />
               <div>
-                <p className="text-2xl font-semibold">{completedTasks}/{totalTasks}</p>
+                <p className="text-2xl font-semibold">
+                  {completedTasks}/{totalTasks}
+                </p>
                 <p className="text-sm text-muted-foreground">Tasks Completed</p>
               </div>
             </div>
@@ -179,7 +172,9 @@ const completedTasks = filteredSessions.reduce((acc, s) =>
         <Card>
           <CardContent className="p-6">
             <div>
-              <p className="text-2xl font-semibold">{selectedSprints.length}</p>
+              <p className="text-2xl font-semibold">
+                {selectedSprints?.length ?? 0}
+              </p>
               <p className="text-sm text-muted-foreground">Active Sprints</p>
             </div>
           </CardContent>
@@ -189,9 +184,19 @@ const completedTasks = filteredSessions.reduce((acc, s) =>
           <CardContent className="p-6">
             <div>
               <p className="text-2xl font-semibold">
-                {Math.round(filteredSessions.reduce((acc, s) => acc + s.watchedPercent, 0) / Math.max(filteredSessions.length, 1))}%
+                {Math.round(
+                  (filteredSessions.reduce(
+                    (acc, s) => acc + s.watchedPercent,
+                    0
+                  ) /
+                    Math.max(filteredSessions.length, 1)) *
+                    1
+                )}
+                %
               </p>
-              <p className="text-sm text-muted-foreground">Avg. Watch Progress</p>
+              <p className="text-sm text-muted-foreground">
+                Avg. Watch Progress
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -213,31 +218,18 @@ const completedTasks = filteredSessions.reduce((acc, s) =>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* {sprints.map((sprint) => (
+                {(sprints ?? []).map((sprint) => (
                   <div key={sprint._id} className="flex items-center space-x-2">
                     <Checkbox
                       id={sprint._id}
-                      checked={selectedSprints.includes(sprint._id)}
+                      checked={selectedSprints?.includes(sprint._id)}
                       onCheckedChange={() => handleSprintToggle(sprint._id)}
                     />
                     <label htmlFor={sprint._id} className="cursor-pointer">
-                      {sprint.name}
+                      {sprint?.title}
                     </label>
                   </div>
-                ))} */}
-                {(sprints ?? []).map((sprint) => (
-  <div key={sprint._id} className="flex items-center space-x-2">
-    <Checkbox
-      id={sprint._id}
-      checked={selectedSprints?.includes(sprint._id)}
-      onCheckedChange={() => handleSprintToggle(sprint._id)}
-    />
-    <label htmlFor={sprint._id} className="cursor-pointer">
-      {sprint?.title}
-    </label>
-  </div>
-))}
-
+                ))}
               </div>
             </CardContent>
           </Card>
@@ -255,15 +247,23 @@ const completedTasks = filteredSessions.reduce((acc, s) =>
               </CardContent>
             </Card>
           ) : (
-            <div className={`grid gap-4 ${
-              viewMode === 'grid' 
-                ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
-                : 'grid-cols-1'
-            }`}>
+            <div
+              className={`grid gap-4 ${
+                viewMode === "grid"
+                  ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                  : "grid-cols-1"
+              }`}
+            >
               {filteredSessions.map((session) => (
                 <SessionCard
                   key={session._id}
-                  session={session}
+                  session={{
+                    ...session,
+                    sprint: {
+                      _id: session.sprint._id,
+                      name: session.sprint.title, // Map 'title' to 'name'
+                    },
+                  }}
                   viewMode={viewMode}
                   onClick={() => setSelectedSession(session)}
                 />

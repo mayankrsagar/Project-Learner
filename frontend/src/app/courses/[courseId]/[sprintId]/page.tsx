@@ -1,30 +1,21 @@
 //session page
 "use client";
 
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from "react";
 
-import {
-  useParams,
-  useRouter,
-} from 'next/navigation';
+import { useParams, useRouter } from "next/navigation";
 
 import {
   createSession,
   deleteSession,
   fetchSessions,
   updateSession,
-} from '@/api/sessionApi';
-import { useAuth } from '@/components/AuthProvider';
-import SessionList from '@/components/SessionList';
-import SessionFormModal from '@/components/SprintFormModal';
-import {
-  Session,
-  SessionCreate,
-} from '@/types';
-import { Button } from '@/ui/button';
+} from "@/api/sessionApi";
+import { useAuth } from "@/components/AuthProvider";
+import SessionFormModal from "@/components/SessionForm";
+import SessionList from "@/components/SessionList";
+import { Session, SessionCreate } from "@/types";
+import { Button } from "@/ui/button";
 
 const SessionsPage: React.FC = () => {
   const { courseId, sprintId } = useParams() as {
@@ -50,7 +41,7 @@ const SessionsPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!user) router.push('/login');
+    if (!user) router.push("/login");
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, courseId, sprintId]);

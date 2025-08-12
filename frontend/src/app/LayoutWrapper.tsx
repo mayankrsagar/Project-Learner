@@ -1,15 +1,12 @@
 "use client";
-import React, {
-  ReactNode,
-  useEffect,
-} from 'react';
+import React, { ReactNode, useEffect } from "react";
 
-import { usePathname } from 'next/navigation';
-import { Provider } from 'react-redux';
+import { usePathname } from "next/navigation";
+import { Provider } from "react-redux";
 
-import { AuthProvider } from '@/components/AuthProvider';
-import Navbar from '@/components/Navbar';
-import { store } from '@/store/store';
+import { AuthProvider } from "@/components/AuthProvider";
+import Navbar from "@/components/Navbar";
+import { store } from "@/store/store";
 
 interface LayoutWrapperProps {
   children: ReactNode;
@@ -17,14 +14,14 @@ interface LayoutWrapperProps {
 
 const NavbarWrapper = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
-  const hideNavbarPaths = ['/login', '/register'];
-  
-useEffect(() => {
-  const script = document.createElement('script');
-  script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-  script.async = true;
-  document.body.appendChild(script);
-}, []);
+  const hideNavbarPaths = ["/login", "/register"];
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   return (
     <>

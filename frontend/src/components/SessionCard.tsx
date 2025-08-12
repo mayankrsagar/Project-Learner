@@ -1,21 +1,27 @@
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
-import { Progress } from './ui/progress';
-import { Button } from './ui/button';
-import { 
-  Play, 
-  FileText, 
-  Calendar, 
-  Clock, 
-  CheckCircle, 
+import {
+  Calendar,
+  CheckCircle,
   Circle,
-  ExternalLink 
-} from 'lucide-react';
+  Clock,
+  ExternalLink,
+  FileText,
+  Play,
+} from "lucide-react";
+
+import { Progress } from "@/ui/progress";
+
+// Update the import path if Badge is located elsewhere, for example:
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+
+// Or, if Badge is from a library, e.g.:
+// import { Badge } from '@radix-ui/react-badge';
 
 interface Task {
   _id: string;
   description: string;
-  type: 'Activity' | 'Quiz' | 'Project';
+  type: "Activity" | "Quiz" | "Project";
   completed: boolean;
   link?: string;
 }
@@ -35,33 +41,39 @@ interface Session {
 
 interface SessionCardProps {
   session: Session;
-  viewMode: 'grid' | 'list';
+  viewMode: "grid" | "list";
   onClick: () => void;
 }
 
 const getTaskTypeColor = (type: string) => {
   switch (type) {
-    case 'Quiz': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
-    case 'Project': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
-    default: return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+    case "Quiz":
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
+    case "Project":
+      return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300";
+    default:
+      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
   }
 };
 
 export function SessionCard({ session, viewMode, onClick }: SessionCardProps) {
-  const completedTasks = session.tasks.filter(task => task.completed).length;
+  const completedTasks = session.tasks.filter((task) => task.completed).length;
   const isWatched = session.watchedPercent >= 90;
-  
+
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
     });
   };
 
-  if (viewMode === 'list') {
+  if (viewMode === "list") {
     return (
-      <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={onClick}>
+      <Card
+        className="cursor-pointer hover:shadow-md transition-shadow"
+        onClick={onClick}
+      >
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex-1 min-w-0">
@@ -78,7 +90,7 @@ export function SessionCard({ session, viewMode, onClick }: SessionCardProps) {
                   {session.sprint.name}
                 </Badge>
               </div>
-              
+
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
@@ -95,16 +107,20 @@ export function SessionCard({ session, viewMode, onClick }: SessionCardProps) {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-4 ml-4">
               <div className="text-center min-w-0">
-                <div className="text-sm text-muted-foreground mb-1">Progress</div>
+                <div className="text-sm text-muted-foreground mb-1">
+                  Progress
+                </div>
                 <div className="w-24">
                   <Progress value={session.watchedPercent} className="h-2" />
-                  <div className="text-xs text-center mt-1">{session.watchedPercent}%</div>
+                  <div className="text-xs text-center mt-1">
+                    {session.watchedPercent}%
+                  </div>
                 </div>
               </div>
-              
+
               <div className="flex gap-2">
                 {session.recordingUrl && (
                   <Button size="sm" variant="outline">
@@ -125,7 +141,10 @@ export function SessionCard({ session, viewMode, onClick }: SessionCardProps) {
   }
 
   return (
-    <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={onClick}>
+    <Card
+      className="cursor-pointer hover:shadow-md transition-shadow"
+      onClick={onClick}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
@@ -141,7 +160,7 @@ export function SessionCard({ session, viewMode, onClick }: SessionCardProps) {
           )}
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {/* Progress */}
         <div>
@@ -174,10 +193,10 @@ export function SessionCard({ session, viewMode, onClick }: SessionCardProps) {
               {completedTasks}/{session.tasks.length} completed
             </span>
           </div>
-          
+
           <div className="flex flex-wrap gap-1">
             {session.tasks.map((task) => (
-              <Badge 
+              <Badge
                 key={task._id}
                 variant="outline"
                 className={`text-xs ${getTaskTypeColor(task.type)}`}

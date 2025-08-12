@@ -1,27 +1,27 @@
-import { useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
-import { Progress } from './ui/progress';
-import { Checkbox } from './ui/checkbox';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { 
-  ArrowLeft, 
-  Play, 
-  FileText, 
-  Calendar, 
-  Clock, 
-  ExternalLink,
-  CheckCircle,
-  Circle,
+import { useState } from "react";
+
+import {
+  ArrowLeft,
   BookOpen,
-  Target
-} from 'lucide-react';
+  Calendar,
+  Clock,
+  ExternalLink,
+  FileText,
+  Play,
+  Target,
+} from "lucide-react";
+
+import { Badge } from "@/ui/badge";
+import { Button } from "@/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
+import { Checkbox } from "@/ui/checkbox";
+import { Progress } from "@/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
 
 interface Task {
   _id: string;
   description: string;
-  type: 'Activity' | 'Quiz' | 'Project';
+  type: "Activity" | "Quiz" | "Project";
   completed: boolean;
   link?: string;
 }
@@ -47,30 +47,37 @@ interface SessionDetailProps {
 
 const getTaskTypeColor = (type: string) => {
   switch (type) {
-    case 'Quiz': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
-    case 'Project': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
-    default: return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+    case "Quiz":
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
+    case "Project":
+      return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300";
+    default:
+      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
   }
 };
 
-export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetailProps) {
+export function SessionDetail({
+  session,
+  onBack,
+  onUpdateSession,
+}: SessionDetailProps) {
   const [localSession, setLocalSession] = useState(session);
-  
+
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
   const handleTaskToggle = (taskId: string) => {
     const updatedSession = {
       ...localSession,
-      tasks: localSession.tasks.map(task =>
+      tasks: localSession.tasks.map((task) =>
         task._id === taskId ? { ...task, completed: !task.completed } : task
-      )
+      ),
     };
     setLocalSession(updatedSession);
     onUpdateSession(updatedSession);
@@ -79,23 +86,26 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
   const handleProgressUpdate = (newProgress: number) => {
     const updatedSession = {
       ...localSession,
-      watchedPercent: newProgress
+      watchedPercent: newProgress,
     };
     setLocalSession(updatedSession);
     onUpdateSession(updatedSession);
   };
 
-  const completedTasks = localSession.tasks.filter(task => task.completed).length;
-  const completionRate = localSession.tasks.length > 0 
-    ? Math.round((completedTasks / localSession.tasks.length) * 100) 
-    : 0;
+  const completedTasks = localSession.tasks.filter(
+    (task) => task.completed
+  ).length;
+  const completionRate =
+    localSession.tasks.length > 0
+      ? Math.round((completedTasks / localSession.tasks.length) * 100)
+      : 0;
 
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           size="sm"
           onClick={onBack}
           className="flex-shrink-0"
@@ -124,7 +134,9 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
                 <Play className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-semibold">{localSession.watchedPercent}%</p>
+                <p className="text-2xl font-semibold">
+                  {localSession.watchedPercent}%
+                </p>
                 <p className="text-sm text-muted-foreground">Watch Progress</p>
               </div>
             </div>
@@ -138,7 +150,9 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
                 <Target className="h-5 w-5 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <p className="text-2xl font-semibold">{completedTasks}/{localSession.tasks.length}</p>
+                <p className="text-2xl font-semibold">
+                  {completedTasks}/{localSession.tasks.length}
+                </p>
                 <p className="text-sm text-muted-foreground">Tasks Completed</p>
               </div>
             </div>
@@ -153,8 +167,8 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
               </div>
               <div>
                 <p className="text-2xl font-semibold">
-                  {localSession.durationMinutes || '—'}
-                  {localSession.durationMinutes && 'm'}
+                  {localSession.durationMinutes || "—"}
+                  {localSession.durationMinutes && "m"}
                 </p>
                 <p className="text-sm text-muted-foreground">Duration</p>
               </div>
@@ -192,22 +206,29 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Watch Progress</span>
                     <span>{localSession.watchedPercent}%</span>
                   </div>
-                  <Progress value={localSession.watchedPercent} className="h-2" />
+                  <Progress
+                    value={localSession.watchedPercent}
+                    className="h-2"
+                  />
                   <div className="flex gap-2">
-                    <Button 
+                    <Button
                       size="sm"
-                      onClick={() => handleProgressUpdate(Math.min(100, localSession.watchedPercent + 10))}
+                      onClick={() =>
+                        handleProgressUpdate(
+                          Math.min(100, localSession.watchedPercent + 10)
+                        )
+                      }
                     >
                       Simulate +10% Progress
                     </Button>
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       variant="outline"
                       onClick={() => handleProgressUpdate(100)}
                     >
@@ -227,17 +248,28 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Video Progress</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    Video Progress
+                  </p>
                   <div className="flex items-center gap-2">
-                    <Progress value={localSession.watchedPercent} className="flex-1 h-2" />
-                    <span className="text-sm font-medium">{localSession.watchedPercent}%</span>
+                    <Progress
+                      value={localSession.watchedPercent}
+                      className="flex-1 h-2"
+                    />
+                    <span className="text-sm font-medium">
+                      {localSession.watchedPercent}%
+                    </span>
                   </div>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Task Completion</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    Task Completion
+                  </p>
                   <div className="flex items-center gap-2">
                     <Progress value={completionRate} className="flex-1 h-2" />
-                    <span className="text-sm font-medium">{completionRate}%</span>
+                    <span className="text-sm font-medium">
+                      {completionRate}%
+                    </span>
                   </div>
                 </div>
               </div>
@@ -260,12 +292,14 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
               {localSession.tasks.length === 0 ? (
                 <div className="text-center py-8">
                   <BookOpen className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                  <p className="text-muted-foreground">No tasks assigned to this session</p>
+                  <p className="text-muted-foreground">
+                    No tasks assigned to this session
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {localSession.tasks.map((task) => (
-                    <div 
+                    <div
                       key={task._id}
                       className="flex items-start gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
                     >
@@ -276,10 +310,16 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <p className={`font-medium ${task.completed ? 'line-through text-muted-foreground' : ''}`}>
+                          <p
+                            className={`font-medium ${
+                              task.completed
+                                ? "line-through text-muted-foreground"
+                                : ""
+                            }`}
+                          >
                             {task.description}
                           </p>
-                          <Badge 
+                          <Badge
                             variant="outline"
                             className={`text-xs ${getTaskTypeColor(task.type)}`}
                           >
@@ -287,7 +327,7 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
                           </Badge>
                         </div>
                         {task.link && (
-                          <a 
+                          <a
                             href={task.link}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -323,7 +363,7 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
                       Access the presentation slides for this session
                     </p>
                     <Button asChild>
-                      <a 
+                      <a
                         href={localSession.slidesUrl}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -352,7 +392,7 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
                       View the detailed agenda and learning objectives
                     </p>
                     <Button asChild variant="outline">
-                      <a 
+                      <a
                         href={localSession.agendaUrl}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -370,7 +410,9 @@ export function SessionDetail({ session, onBack, onUpdateSession }: SessionDetai
               <Card>
                 <CardContent className="p-8 text-center">
                   <FileText className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                  <p className="text-muted-foreground">No additional resources available</p>
+                  <p className="text-muted-foreground">
+                    No additional resources available
+                  </p>
                 </CardContent>
               </Card>
             )}
