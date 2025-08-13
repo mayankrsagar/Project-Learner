@@ -1,9 +1,13 @@
 "use client";
 import React from "react";
 
+import { useParams } from "next/navigation";
+
+import SprintManager from "@/components/SprintManager";
+
 const CoursePage = () => {
-  // const params = useParams();
-  // const courseId = params.courseId as string;
+  const params = useParams();
+  const courseId = params.courseId as string;
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-900">
@@ -13,7 +17,8 @@ const CoursePage = () => {
             <h1 className="text-4xl font-bold mb-6 text-brown-800 dark:text-amber-300 tracking-tight">
               🪵 Course Dashboard
             </h1>
-            {/* <SprintManager courseId={courseId} /> */}
+            <SprintManager courseId={courseId} />
+            ``
           </div>
         </div>
       </div>

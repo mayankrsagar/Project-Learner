@@ -4,19 +4,26 @@ import { useRouter } from "next/navigation";
 
 import { Sprint, UserProfile } from "@/types";
 
-import { fetchSprintsForCourse, updateSprintStatus } from "../api/sprintApi";
+import {
+  createSprint,
+  deleteSprint,
+  fetchSprintsForCourse,
+  updateSprint,
+  updateSprintStatus,
+} from "../api/sprintApi";
 import { useAuth } from "./AuthProvider";
+import SprintFormModal from "./SprintFormModal";
 
 const SprintManager = ({ courseId }: { courseId: string }) => {
   const [sprints, setSprints] = useState<Sprint[]>([]);
-  // const [form, setForm] = useState({
-  //   code: "",
-  //   title: "",
-  //   order: 1,
-  //   status: "Locked",
-  // });
-  // const [editingId, setEditingId] = useState<string | null>(null);
-  // const [addingSprint, setAddingSprint] = useState<boolean>(false);
+  const [form, setForm] = useState({
+    code: "",
+    title: "",
+    order: 1,
+    status: "Locked",
+  });
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [addingSprint, setAddingSprint] = useState<boolean>(false);
 
   const { user }: { user: UserProfile | null } = useAuth();
   const isUserAdmin = user?.role === "Admin";
@@ -43,46 +50,46 @@ const SprintManager = ({ courseId }: { courseId: string }) => {
     loadSprints();
   }, [courseId, loadSprints]);
 
-  // const reset = (): void => {
-  //   setForm({ code: "", title: "", order: 1, status: "Locked" });
-  //   setEditingId(null);
-  //   setAddingSprint(false);
-  // };
+  const reset = (): void => {
+    setForm({ code: "", title: "", order: 1, status: "Locked" });
+    setEditingId(null);
+    setAddingSprint(false);
+  };
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   try {
-  //     if (editingId) {
-  //       await updateSprint(courseId, editingId, form);
-  //     } else {
-  //       await createSprint(courseId, { ...form, course: courseId });
-  //     }
-  //     reset();
-  //     loadSprints();
-  //   } catch (error) {
-  //     console.error("Failed to save sprint", error);
-  //   }
-  // };
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      if (editingId) {
+        await updateSprint(courseId, editingId, form);
+      } else {
+        await createSprint(courseId, { ...form, course: courseId });
+      }
+      reset();
+      loadSprints();
+    } catch (error) {
+      console.error("Failed to save sprint", error);
+    }
+  };
 
-  // const handleEdit = (sprint: Sprint): void => {
-  //   setForm({
-  //     code: sprint.code,
-  //     title: sprint.title,
-  //     order: sprint.order,
-  //     status: sprint.status,
-  //   });
-  //   setEditingId(sprint._id);
-  // };
+  const handleEdit = (sprint: Sprint): void => {
+    setForm({
+      code: sprint.code,
+      title: sprint.title,
+      order: sprint.order,
+      status: sprint.status,
+    });
+    setEditingId(sprint._id);
+  };
 
-  // const handleDelete = async (id: string): Promise<void> => {
-  //   try {
-  //     await deleteSprint(courseId, id);
-  //     reset();
-  //     loadSprints();
-  //   } catch (error) {
-  //     console.error("Failed to delete sprint", error);
-  //   }
-  // };
+  const handleDelete = async (id: string): Promise<void> => {
+    try {
+      await deleteSprint(courseId, id);
+      reset();
+      loadSprints();
+    } catch (error) {
+      console.error("Failed to delete sprint", error);
+    }
+  };
 
   const handleStatusUpdate = async (
     id: string,
@@ -105,23 +112,23 @@ const SprintManager = ({ courseId }: { courseId: string }) => {
       <div className="flex justify-start items-center mb-6">
         {isUserAdmin && (
           <button
-            // onClick={() => setAddingSprint(true)}
+            onClick={() => setAddingSprint(true)}
             className="fixed bottom-6 right-6 z-50 bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-full shadow-lg transition-transform transform hover:scale-105 backdrop-blur-sm"
           >
             + Add Sprint
           </button>
         )}
       </div>
-      {/* 
+
       {(addingSprint || editingId) && (
         <SprintFormModal
-        // form={form}
-        // setForm={setForm}
-        // handleSubmit={handleSubmit}
-        // editingId={editingId}
-        // reset={reset}
+          form={form}
+          setForm={setForm}
+          handleSubmit={handleSubmit}
+          editingId={editingId}
+          reset={reset}
         />
-      )} */}
+      )}
 
       <ul className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
         {sprints.map((sprint) => (
@@ -141,13 +148,13 @@ const SprintManager = ({ courseId }: { courseId: string }) => {
             {isUserAdmin ? (
               <div className="flex flex-wrap gap-3">
                 <button
-                  // onClick={() => handleEdit(sprint)}
+                  onClick={() => handleEdit(sprint)}
                   className="bg-yellow-400 text-black px-4 py-1 rounded-full hover:bg-yellow-500 transition"
                 >
                   ✏️ Edit
                 </button>
                 <button
-                  // onClick={() => handleDelete(sprint._id)}
+                  onClick={() => handleDelete(sprint._id)}
                   className="bg-red-500 text-white px-4 py-1 rounded-full hover:bg-red-600 transition"
                 >
                   🗑️ Delete
