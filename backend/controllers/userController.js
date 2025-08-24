@@ -126,9 +126,18 @@ export const userUpdatingDetails = async (req, res) => {
     //Validate if the user is trying to update their own profile
     //will update later
 
+    if (req.file) {
+      updatedData.$push = {
+        resumes: {
+          fileUrl: req.file.path,
+          variant: req.body.variant || "original",
+        },
+      };
+    }
+
     const updatedUser = await updateById(id, {
       ...updatedData,
-      // lastUpdatedAt: new Date(),
+      lastUpdatedAt: new Date(),
     });
 
     if (!updatedUser) {
